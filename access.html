@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>验证</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #000;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+    
+    /* 全屏矩阵雨效果 */
+    .matrix-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      opacity: 0.15;
+    }
+    
+    /* 改进的验证框样式 */
+    .access-container {
+      background-color: rgba(0, 20, 0, 0.7);
+      border: 1px solid #0f0;
+      padding: 2.5rem;
+      border-radius: 2px;
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 0 25px rgba(0, 255, 0, 0.5);
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      backdrop-filter: blur(2px);
+    }
+    
+    /* 边框发光动画 */
+    .access-container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 1px solid transparent;
+      border-image: linear-gradient(45deg, #0f0, transparent, #0f0) 1;
+      animation: borderGlow 4s infinite linear;
+      z-index: -1;
+    }
+    
+    @keyframes borderGlow {
+      0% { opacity: 0.3; box-shadow: 0 0 10px #0f0; }
+      50% { opacity: 1; box-shadow: 0 0 20px #0f0; }
+      100% { opacity: 0.3; box-shadow: 0 0 10px #0f0; }
+    }
+    
+    /* 标题样式 */
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 10px #0f0;
+      letter-spacing: 3px;
+      position: relative;
+    }
+    
+    /* 输入框样式 */
+    .access-input {
+      background: rgba(0, 10, 0, 0.5);
+      border: 1px solid #0f0;
+      color: #0f0;
+      padding: 0.75rem 1rem;
+      width: 100%;
+      font-size: 1.1rem;
+      font-family: 'Courier New', monospace;
+      margin: 1.5rem 0;
+      outline: none;
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+      transition: all 0.3s;
+    }
+    
+    .access-input:focus {
+      box-shadow: 0 0 20px #0f0;
+      background: rgba(0, 15, 0, 0.7);
+    }
+    
+    .access-input::placeholder {
+      color: #0a0;
+      opacity: 0.7;
+    }
+    
+    /* 按钮样式 */
+    .access-btn {
+      background: linear-gradient(to right, rgba(0, 255, 0, 0.2), rgba(0, 200, 0, 0.3));
+      color: #0f0;
+      border: 1px solid #0f0;
+      padding: 0.8rem 2.5rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Courier New', monospace;
+      margin-top: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 1px;
+    }
+    
+    .access-btn:hover {
+      background: linear-gradient(to right, rgba(0, 255, 0, 0.3), rgba(0, 200, 0, 0.4));
+      box-shadow: 0 0 20px #0f0;
+      transform: translateY(-2px);
+    }
+    
+    /* 错误消息 */
+    .error-message {
+      color: #f00;
+      margin-top: 1rem;
+      display: none;
+      text-shadow: 0 0 5px #f00;
+      font-size: 0.9rem;
+    }
+    
+    /* 打字效果 */
+    .typing-text {
+      border-right: 2px solid #0f0;
+      animation: blink 0.7s infinite;
+      overflow: hidden;
+      white-space: nowrap;
+      margin: 0 auto;
+      letter-spacing: 3px;
+    }
+    
+    @keyframes blink {
+      from, to { border-color: transparent }
+      50% { border-color: #0f0 }
+    }
+    
+    /* 全屏掉落文字 */
+    .falling-text {
+      position: fixed;
+      color: rgba(0, 255, 0, 0.7);
+      font-size: 16px;
+      z-index: 0;
+      pointer-events: none;
+      text-shadow: 0 0 5px #0f0;
+    }
+    
+    /* 扫描线效果 */
+    .scan-line {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to bottom, 
+        rgba(0, 255, 0, 0), 
+        rgba(0, 255, 0, 0.8), 
+        rgba(0, 255, 0, 0));
+      animation: scan 5s linear infinite;
+      z-index: 2;
+      opacity: 0.5;
+    }
+    
+    @keyframes scan {
+      0% { top: -10px; }
+      100% { top: 100%; }
+    }
+    
+    /* 验证框内的网格线 */
+    .grid-lines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(to right, rgba(0, 255, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 255, 0, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+      z-index: -1;
+    }
+    
+    /* 角标装饰 */
+    .corner {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: #0f0;
+      border-style: solid;
+      border-width: 0;
+      opacity: 0.7;
+    }
+    
+    .corner-tl {
+      top: 10px;
+      left: 10px;
+      border-top-width: 2px;
+      border-left-width: 2px;
+    }
+    
+    .corner-tr {
+      top: 10px;
+      right: 10px;
+      border-top-width: 2px;
+      border-right-width: 2px;
+    }
+    
+    .corner-bl {
+      bottom: 10px;
+      left: 10px;
+      border-bottom-width: 2px;
+      border-left-width: 2px;
+    }
+    
+    .corner-br {
+      bottom: 10px;
+      right: 10px;
+      border-bottom-width: 2px;
+      border-right-width: 2px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 全屏矩阵雨 -->
+  <div class="matrix-container" id="matrix"></div>
+  
+  <!-- 全屏扫描线 -->
+  <div class="scan-line"></div>
+  
+  <!-- 改进后的验证框 -->
+  <div class="access-container">
+    <!-- 角标装饰 -->
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+    
+    <!-- 网格背景 -->
+    <div class="grid-lines"></div>
+    
+    <!-- 标题 -->
+    <h1 class="typing-text" id="typingHeader">证书及工作证制作页面</h1>
+    
+    <!-- 描述文本 -->
+    <p style="color: #0a0; margin-bottom: 1rem;">:: 2025/Elon Musk/al006::</p>
+    
+    <!-- 输入框 -->
+    <div style="position: relative;">
+      <input type="text" id="accessCode" class="access-input" placeholder="密码：al006发财">
+    </div>
+    
+    <!-- 错误消息 -->
+    <p class="error-message" id="errorMsg">请输入正确密码：aL006发财</p>
+    
+    <!-- 验证按钮 -->
+    <button class="access-btn" id="submitBtn">进入</button>
+    
+    <!-- 底部提示 -->
+    <div style="margin-top: 2rem; font-size: 0.8rem; color: #0a0;">
+      <p>>_ 2025AL0061618XC</p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 全屏矩阵雨效果
+      const matrix = document.getElementById('matrix');
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      matrix.appendChild(canvas);
+      
+      const chars = "01!@#$%^&*()_+-=[]{}|;':\",./<>?\\ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const fontSize = 18;
+      const columns = canvas.width / fontSize;
+      const drops = [];
+      
+      for (let i = 0; i < columns; i++) {
+        drops[i] = Math.random() * -100;
+      }
+      
+      function drawMatrix() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#0f0';
+        ctx.font = fontSize + 'px monospace';
+        
+        for (let i = 0; i < drops.length; i++) {
+          const text = chars.charAt(Math.floor(Math.random() * chars.length));
+          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+          
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      }
+      
+      setInterval(drawMatrix, 50);
+      
+      // 打字机效果
+      const headerText = ">_ 2025AL0061618XCBFKXKLYZN";
+      const typingHeader = document.getElementById('typingHeader');
+      let i = 0;
+      
+      function typeWriter() {
+        if (i < headerText.length) {
+          typingHeader.innerHTML = headerText.substring(0, i+1);
+          i++;
+          setTimeout(typeWriter, 100);
+        } else {
+          typingHeader.style.animation = "none";
+          typingHeader.style.borderRight = "none";
+        }
+      }
+      
+      setTimeout(typeWriter, 500);
+      
+      // 全屏掉落文字效果
+      function createFallingChar() {
+        const char = document.createElement('div');
+        char.className = 'falling-text';
+        char.textContent = chars.charAt(Math.floor(Math.random() * chars.length));
+        char.style.left = Math.random() * 100 + 'vw';
+        char.style.top = '-20px';
+        char.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        char.style.animationDelay = (Math.random() * 2) + 's';
+        char.style.opacity = Math.random() * 0.5 + 0.3;
+        document.body.appendChild(char);
+        
+        setTimeout(() => {
+          char.remove();
+        }, 5000);
+      }
+      
+      // 添加CSS动画
+      const style = document.createElement('style');
+      style.innerHTML = `
+        @keyframes fall {
+          to { 
+            transform: translateY(calc(100vh + 20px)) rotate(${Math.random() * 360}deg); 
+            opacity: 0;
+          }
+        }
+        
+        .falling-text {
+          animation-name: fall;
+          animation-timing-function: linear;
+          animation-iteration-count: 1;
+        }
+        
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+          20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .animate-shake {
+          animation: shake 0.5s;
+        }
+      `;
+      document.head.appendChild(style);
+      
+      // 启动掉落文字
+      setInterval(createFallingChar, 80);
+      
+      // 验证逻辑
+      const accessCode = document.getElementById('accessCode');
+      const submitBtn = document.getElementById('submitBtn');
+      const errorMsg = document.getElementById('errorMsg');
+      
+  submitBtn.addEventListener('click', function() {
+    if (accessCode.value.trim().toLowerCase() === 'al006发财') {
+      submitBtn.textContent = "输入正确";
+      submitBtn.style.background = "linear-gradient(to right, rgba(0, 255, 0, 0.5), rgba(0, 200, 0, 0.6))";
+      submitBtn.style.boxShadow = "0 0 30px #0f0";
+      
+      localStorage.setItem('accessVerified', 'true');
+      
+      // 获取目标页面或默认跳转到index.html
+      const target = localStorage.getItem('redirectAfterVerify') || 'index.html';
+      localStorage.removeItem('redirectAfterVerify');
+      
+      setTimeout(() => {
+        window.location.href = target;
+      }, 1000);
+    }
+      });
+      
+      // 回车键提交
+      accessCode.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          submitBtn.click();
+        }
+      });
+      
+      // 输入框聚焦效果
+      accessCode.addEventListener('focus', function() {
+        this.style.boxShadow = '0 0 20px #0f0';
+        this.style.background = 'rgba(0, 15, 0, 0.7)';
+      });
+      
+      accessCode.addEventListener('blur', function() {
+        this.style.boxShadow = '0 0 15px rgba(0, 255, 0, 0.2)';
+        this.style.background = 'rgba(0, 10, 0, 0.5)';
+      });
+    });
+  </script>
+</body>
+</html>
