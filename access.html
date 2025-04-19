@@ -18,7 +18,6 @@
       margin: 0;
     }
     
-    /* 全屏矩阵雨效果 */
     .matrix-container {
       position: fixed;
       top: 0;
@@ -29,7 +28,6 @@
       opacity: 0.15;
     }
     
-    /* 改进的验证框样式 */
     .access-container {
       background-color: rgba(0, 20, 0, 0.7);
       border: 1px solid #0f0;
@@ -45,7 +43,6 @@
       backdrop-filter: blur(2px);
     }
     
-    /* 边框发光动画 */
     .access-container::before {
       content: "";
       position: absolute;
@@ -65,7 +62,6 @@
       100% { opacity: 0.3; box-shadow: 0 0 10px #0f0; }
     }
     
-    /* 标题样式 */
     h1 {
       font-size: 2rem;
       margin-bottom: 1.5rem;
@@ -74,7 +70,6 @@
       position: relative;
     }
     
-    /* 输入框样式 */
     .access-input {
       background: rgba(0, 10, 0, 0.5);
       border: 1px solid #0f0;
@@ -99,7 +94,6 @@
       opacity: 0.7;
     }
     
-    /* 按钮样式 */
     .access-btn {
       background: linear-gradient(to right, rgba(0, 255, 0, 0.2), rgba(0, 200, 0, 0.3));
       color: #0f0;
@@ -121,7 +115,6 @@
       transform: translateY(-2px);
     }
     
-    /* 错误消息 */
     .error-message {
       color: #f00;
       margin-top: 1rem;
@@ -130,7 +123,6 @@
       font-size: 0.9rem;
     }
     
-    /* 打字效果 */
     .typing-text {
       border-right: 2px solid #0f0;
       animation: blink 0.7s infinite;
@@ -145,7 +137,6 @@
       50% { border-color: #0f0 }
     }
     
-    /* 全屏掉落文字 */
     .falling-text {
       position: fixed;
       color: rgba(0, 255, 0, 0.7);
@@ -155,7 +146,6 @@
       text-shadow: 0 0 5px #0f0;
     }
     
-    /* 扫描线效果 */
     .scan-line {
       position: fixed;
       top: 0;
@@ -176,7 +166,6 @@
       100% { top: 100%; }
     }
     
-    /* 验证框内的网格线 */
     .grid-lines {
       position: absolute;
       top: 0;
@@ -190,7 +179,6 @@
       z-index: -1;
     }
     
-    /* 角标装饰 */
     .corner {
       position: absolute;
       width: 20px;
@@ -237,7 +225,7 @@
   <!-- 全屏扫描线 -->
   <div class="scan-line"></div>
   
-  <!-- 改进后的验证框 -->
+  <!-- 验证框 -->
   <div class="access-container">
     <!-- 角标装饰 -->
     <div class="corner corner-tl"></div>
@@ -259,8 +247,8 @@
       <input type="text" id="accessCode" class="access-input" placeholder="密码：al006发财">
     </div>
     
-    <!-- 错误消息 -->
-    <p class="error-message" id="errorMsg">请输入正确密码：aL006发财</p>
+    <!-- 错误消息（已修复显示问题） -->
+    <p class="error-message" id="errorMsg">输入错误，请输入正确口令： "al006发财"</p>
     
     <!-- 验证按钮 -->
     <button class="access-btn" id="submitBtn">进入</button>
@@ -328,75 +316,33 @@
       
       setTimeout(typeWriter, 500);
       
-      // 全屏掉落文字效果
-      function createFallingChar() {
-        const char = document.createElement('div');
-        char.className = 'falling-text';
-        char.textContent = chars.charAt(Math.floor(Math.random() * chars.length));
-        char.style.left = Math.random() * 100 + 'vw';
-        char.style.top = '-20px';
-        char.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        char.style.animationDelay = (Math.random() * 2) + 's';
-        char.style.opacity = Math.random() * 0.5 + 0.3;
-        document.body.appendChild(char);
-        
-        setTimeout(() => {
-          char.remove();
-        }, 5000);
-      }
-      
-      // 添加CSS动画
-      const style = document.createElement('style');
-      style.innerHTML = `
-        @keyframes fall {
-          to { 
-            transform: translateY(calc(100vh + 20px)) rotate(${Math.random() * 360}deg); 
-            opacity: 0;
-          }
-        }
-        
-        .falling-text {
-          animation-name: fall;
-          animation-timing-function: linear;
-          animation-iteration-count: 1;
-        }
-        
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-          20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-        
-        .animate-shake {
-          animation: shake 0.5s;
-        }
-      `;
-      document.head.appendChild(style);
-      
-      // 启动掉落文字
-      setInterval(createFallingChar, 80);
-      
-      // 验证逻辑
+      // 验证逻辑（已修复错误提示）
       const accessCode = document.getElementById('accessCode');
       const submitBtn = document.getElementById('submitBtn');
       const errorMsg = document.getElementById('errorMsg');
       
-  submitBtn.addEventListener('click', function() {
-    if (accessCode.value.trim().toLowerCase() === 'al006发财') {
-      submitBtn.textContent = "输入正确";
-      submitBtn.style.background = "linear-gradient(to right, rgba(0, 255, 0, 0.5), rgba(0, 200, 0, 0.6))";
-      submitBtn.style.boxShadow = "0 0 30px #0f0";
-      
-      localStorage.setItem('accessVerified', 'true');
-      
-      // 获取目标页面或默认跳转到index.html
-      const target = localStorage.getItem('redirectAfterVerify') || 'index.html';
-      localStorage.removeItem('redirectAfterVerify');
-      
-      setTimeout(() => {
-        window.location.href = target;
-      }, 1000);
-    }
+      submitBtn.addEventListener('click', function() {
+        if (accessCode.value.trim().toLowerCase() === 'al006发财') {
+          submitBtn.textContent = "验证通过...";
+          submitBtn.style.background = "linear-gradient(to right, rgba(0, 255, 0, 0.5), rgba(0, 200, 0, 0.6))";
+          submitBtn.style.boxShadow = "0 0 30px #0f0";
+          
+          // 使用sessionStorage存储验证状态
+          sessionStorage.setItem('accessVerified', 'true');
+          
+          const target = sessionStorage.getItem('redirectAfterVerify') || 'index.html';
+          sessionStorage.removeItem('redirectAfterVerify');
+          
+          setTimeout(() => {
+            window.location.href = target;
+          }, 1000);
+        } else {
+          errorMsg.style.display = 'block'; // 现在会正确显示错误消息
+          accessCode.classList.add('animate-shake');
+          setTimeout(() => {
+            accessCode.classList.remove('animate-shake');
+          }, 500);
+        }
       });
       
       // 回车键提交
@@ -406,16 +352,19 @@
         }
       });
       
-      // 输入框聚焦效果
-      accessCode.addEventListener('focus', function() {
-        this.style.boxShadow = '0 0 20px #0f0';
-        this.style.background = 'rgba(0, 15, 0, 0.7)';
-      });
-      
-      accessCode.addEventListener('blur', function() {
-        this.style.boxShadow = '0 0 15px rgba(0, 255, 0, 0.2)';
-        this.style.background = 'rgba(0, 10, 0, 0.5)';
-      });
+      // 添加抖动动画样式
+      const style = document.createElement('style');
+      style.innerHTML = `
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+          20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .animate-shake {
+          animation: shake 0.5s;
+        }
+      `;
+      document.head.appendChild(style);
     });
   </script>
 </body>

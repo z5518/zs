@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>
-    // 检查是否已验证
-    if (!localStorage.getItem('accessVerified')) {
+    // 修改后的验证检查（使用sessionStorage）
+    if (!sessionStorage.getItem('accessVerified')) {
       if (!window.location.pathname.endsWith('access.html')) {
-        localStorage.setItem('redirectAfterVerify', '1.html');
+        sessionStorage.setItem('redirectAfterVerify', '1.html');
         window.location.href = 'access.html';
       }
     }
@@ -62,19 +62,19 @@
   <script src="script.js"></script>
 
   <script>
-    // 导航验证
+    // 修改后的导航验证
     document.getElementById('navIndex')?.addEventListener('click', function(e) {
-      if (!localStorage.getItem('accessVerified')) {
+      if (!sessionStorage.getItem('accessVerified')) {
         e.preventDefault();
-        localStorage.setItem('redirectAfterVerify', 'index.html');
+        sessionStorage.setItem('redirectAfterVerify', 'index.html');
         window.location.href = 'access.html';
       }
     });
     
     document.getElementById('navWork')?.addEventListener('click', function(e) {
-      if (!localStorage.getItem('accessVerified')) {
+      if (!sessionStorage.getItem('accessVerified')) {
         e.preventDefault();
-        localStorage.setItem('redirectAfterVerify', '1.html');
+        sessionStorage.setItem('redirectAfterVerify', '1.html');
         window.location.href = 'access.html';
       }
     });
