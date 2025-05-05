@@ -1,83 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>
-    // 修改后的验证检查（使用sessionStorage）
-    if (!sessionStorage.getItem('accessVerified')) {
-      if (!window.location.pathname.endsWith('access.html')) {
-        sessionStorage.setItem('redirectAfterVerify', 'index.html');
-        window.location.href = 'access.html';
-      }
-    }
-  </script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
-  <link rel="stylesheet" href="styles.css">
-  <title>工作证书制作</title>
-</head>
-<body class="bg-gray-100">
-  <nav class="bg-white shadow-md">
-    <div class="container mx-auto px-4 py-3">
-      <div class="flex justify-center items-center">
-        <div class="space-x-4">
-          <a href="index.html" class="text-gray-700 hover:text-gray-900" id="navIndex">证书制作</a>
-          <a href="https://t.me/+6283863940383" target="_blank" class="text-gray-700 hover:text-gray-900">☎</a>
-          <a href="1.html" class="text-gray-700 hover:text-gray-900" id="navWork">工作证件制作</a>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <section class="container mx-auto px-4 py-8">
-    <div class="image-container">
-      <img src="https://i.imgur.com/k4Qjlza.png" alt="工作证件">
-      <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
-      <div id="certificate-avatar" class="certificate-avatar" style="width: 160px; height: 160px; top: 240px; left: 195px;">
-        <label for="avatar-upload" class="block w-full h-full cursor-pointer">
-          <img id="avatar-img" src="" alt="-----上传照片--" class="w-full h-full object-cover">
-        </label>
-      </div>
-      <input type="text" id="certificate-name" class="input-field" placeholder="输入名字..." style="top: 425px; left: 210px;">
-      <input type="text" id="certificate-age" class="input-field" placeholder="输入Boralex号码..." style="top: 476px; left: 210px;">
-      <input type="tel" id="certificate-phone" class="input-field" placeholder="日期顺序（日/月/年）" style="top: 526px; left: 210px;">
-    </div>
-  </section>
-
-  <div id="cropModal" class="modal hidden">
-    <div class="modal-content">
-      <div class="mb-4">
-        <img id="cropImage" src="" alt="裁剪图">
-      </div>
-      <div class="text-right space-x-2">
-        <button id="cancelCrop" class="px-4 py-2 bg-gray-300 rounded">取消</button>
-        <button id="confirmCrop" class="px-4 py-2 bg-blue-500 text-white rounded">确认</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-
-  <script>
-    // 修改后的导航验证
-    document.getElementById('navIndex')?.addEventListener('click', function(e) {
-      if (!sessionStorage.getItem('accessVerified')) {
-        e.preventDefault();
-        sessionStorage.setItem('redirectAfterVerify', 'index.html');
-        window.location.href = 'access.html';
-      }
-    });
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Guide</title>
+    <link rel="stylesheet" href="css/base.css">
     
-    document.getElementById('navWork')?.addEventListener('click', function(e) {
-      if (!sessionStorage.getItem('accessVerified')) {
-        e.preventDefault();
-        sessionStorage.setItem('redirectAfterVerify', '1.html');
-        window.location.href = 'access.html';
-      }
-    });
-  </script>
+    <style>
+        body {
+            background-image: url('your-background-image-url.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+
+    <script>
+        // Redirect to login page if user is not authenticated
+        if (sessionStorage.getItem('access_granted') !== 'true') {
+            window.location.href = 'landing.html';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">Boralex</div>
+            <div class="menu-icon" onclick="toggleMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Work Guide</a></li>
+                <li><a href="xa.html">Promotion Techniques</a></li>
+                <li><a href="xb.html">Product Details</a></li>
+                <li><a href="xc.html">FAQ & Solutions</a></li>
+                <li><a href="xd.html">Videos/Images</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Referral and Rewards Manual</h1>
+        <p>Once you join Boralex, you can earn income in three ways</p>
+        <p>— <span style="color: red;">Method ①:</span> Machine Income</p>
+        <p>— <span style="color: red;">Method ②:</span> Referral Rewards</p>
+        <p>— <span style="color: red;">Method ③:</span> Team Commission Income</p>
+        <p>This page explains in detail the referral rewards and team commission income. Please read carefully—it will help you earn more income easily and effectively through Boralex.</p>
+
+        <h2>Method ①: Machine Income</h2>
+
+        <img src="https://i.imgur.com/uGGM4DB.jpeg" alt="Cosmic Image">
+
+        <p>This is the first way you can earn income. The B-series machines you rent will generate income for you every weekday (Monday to Friday). Currently, Boralex produces four different models of B-series machines.</p>
+
+        <p>The price of each model varies, and so does the daily income you receive after renting. If you want to increase your income, you can rent multiple machines at the same time to boost your daily earnings.</p>
+
+        <p>For example, if you rent an B10 machine, it will add an extra 44 ZMW to your current daily income. <span style="color:red;">One person can increase their daily income by renting multiple machines simultaneously.</span></p>
+
+        <h2>This is the 2nd way to earn income: Referral Rewards</h2>
+
+        <p>Each time a new member registers a Boralex account through your link and successfully rents a machine, you will receive a referral reward of 40 to 120 ZMW.</p>
+
+        <p>How to find your referral link? First log in to your Boralex account, then follow the steps shown in the image to locate your exclusive referral link:</p>
+
+        <img src="https://i.imgur.com/qfRFlUu.png" alt="Cosmic Image">
+
+        <p><span style="color: red;"> ①:</span> Log in to your Boralex account and click <span style="color: red;">“Invite Friends” </span>on the <span style="color: red;">“My”</span> page.</p>
+
+        <p><span style="color: red;"> ②:</span> After entering the invitation page, click <span style="color: red;">“Copy”</span> to copy your personal invitation link.</p>
+
+        <p><span style="color: red;"> ②:</span>Then return to your WhatsApp chat with your friend, long-press the message input box, and tap <span style="color: red;">“Paste”</span> to send your exclusive invitation link to your friend.</p>
+
+        <p>You can follow the steps shown in the image to find, copy, and send this link to your friends, family, or anyone interested in joining Boralex. Once they register and rent a machine, you’ll receive a referral reward of 40 to 120 ZMW</p>
+
+        <h2>How much referral reward do you get each time you invite a new member?</h2>
+
+        <img src="https://i.imgur.com/Pf8WflE.jpeg" alt="Cosmic Image">
+
+        <p><strong><u>Example:</u></strong></p>
+
+        <p>● If the person you invited rents an B-2 machine (200 ZMW), you will receive a referral reward of 40 ZMW.</p>
+
+        <p><span style="color:red;">● There is no limit to referral rewards—the more new members you invite, the more referral rewards you will earn:</span></p>
+
+        <p>For example, if you refer three new members on the same day and each of them rents a B-2 machine, you will receive a total referral reward of 40 + 40 + 40 = 120 ZMW. (There is no limit to referral rewards—the more new members join your team, the more referral rewards you can earn.)
+</p>
+
+        <h2>This is the 3rd way to earn income: Team Commissions</h2>
+
+        <p>When you invite new members to join your team, you’ll not only receive referral rewards—you’ll also earn team commissions. Each day, you earn 10% of the income generated by the machines these members rent. The more they earn, the more you earn too.</p>
+
+        <img src="https://i.imgur.com/PmdOwoo.jpeg" alt="Cosmic Image">
+
+        <p><span style="color:red;">● Level B:</span> Members you refer directly. You receive 10% of their daily machine income.</p>
+        <p><span style="color:red;">● Level C:</span> Members referred by your level B members. You receive 5% of their daily machine income.</p>
+        <p><span style="color:red;">● Level D:</span> Members referred by your level C members. You receive 1% of their daily machine income.</p>
+
+        <p><strong><u>Example:</u></strong></p>
+
+        <p>You invited a member who rented an B-2 machine. This machine earns them 8 ZMW per day. Each day they log in and collect their earnings, you receive 10% of that—0.8 ZMW. This 10% commission is automatically credited to your Boralex account daily when the member collects their income.</p>
+
+        <p>The machine is rented for 41 days, generating 50 x 8= 400 ZMW. This means they will generate 40 ZMW in commissions for you.</p>
+
+        <p style="color:#666666;">Only machines of the same model can generate commissions for you. When your team member collects income from their machine, the commissions are automatically added to your Boralex account. So don’t forget to remind your team to collect their machine income daily.</p>
+
+        <h2>Team Commission Income:</h2>
+
+        <p>Team commissions are the most stable income source because referral rewards are one-time, while team commissions are daily. In fact, if your team is strong enough, you can earn team commissions even while sleeping, as they are automatically credited to your Boralex account daily.</p>
+
+        <p>As the company grows and the business expands, the number of members will increase. To facilitate management, the company integrates all your referred members into your team (levels B/C/D). As a team leader, you are responsible for helping manage and supervise your team’s promotion tasks. That’s why you receive a share of their income as team commissions. This is how you earn by managing a team.</p>
+
+        <p>In sales, commissions are fundamental, as they drive potential and motivation. A good team manager will encourage and guide their members to develop their own teams, since they can earn 1% to 10% of these members’ daily income.</p>
+
+        <p><span style="color:red;">(If your team performs well and you demonstrate strong management skills, you can apply to become a team manager and receive a fixed monthly salary of 5,000 to 1,000,000 ZMW.)</span></p>
+
+        <h2>How to increase your chances of success in inviting new members?</h2>
+
+        <p><strong style="color:red;">①</strong> Invite close friends and family: They’re more likely to trust and support you. Once they join, you can tell others, “My family and best friends are on my team—we all earn with Boralex. You can trust it.”</p>
+
+        <p><strong style="color:red;">②</strong> Invite wealthier friends: They can more easily rent machines. But also invite less wealthy friends—they may follow you if you offer help.</p>
+
+        <p><strong style="color:red;">③</strong> Rent more machines: Increase your Boralex income. By showing higher earnings, you’ll attract more people. Share screenshots of withdrawals in your WhatsApp status.</p>
+
+        <p><strong style="color:red;">④</strong> Share your earnings screenshots: Post proof of income and withdrawals on social media with your invitation link to attract others.</p>
+
+        <p><strong style="color:red;">⑤</strong> **Help your friends financially:** If they can’t afford it, lend them 200 ZMW so they can rent the cheapest machine (B-2). Once they start earning money, they’ll be able to pay you back. This not only allows you to receive referral rewards and gain their gratitude, but also helps them quickly earn back the money and repay you.
+</p>
+
+        <h2>How to level up your VIP status and the benefits of each VIP level:</h2>
+
+        <img src="https://i.imgur.com/K7oddbE.jpeg" alt="Cosmic Image">
+
+        <p><strong style="color:red;">VIP1:</strong> Rent any machine to become VIP1</p>
+        <p><strong style="color:red;">VIP2:</strong> Invite 3 new members who rent a machine to become VIP2</p>
+        <p><strong style="color:red;">VIP3:</strong> If 3 of your team members reach VIP2, you become VIP3</p>
+        <p><strong style="color:red;">VIP4:</strong> If two level D members reach VIP3 and your team reaches 100 members total (levels B, C, and D), you become VIP4</p>
+
+        <p style="color:#666666;">Each time your VIP level increases, you will receive a corresponding reward. If your team performs well enough, you can also apply to receive an additional monthly salary of 5,000 to 1,000,000 ZMW.
+</p>
+
+        <h2>Attention:</h2>
+
+        <p>Every time a new member joins your team via your link and rents a machine, ask them to add me on WhatsApp and send a message saying: “Hello, the number used for registering on Boralex is: ****”.</p>
+
+        <p>When I receive their message, I will give them a brief onboarding and guidance to help them quickly become familiar with how Boralex works. After that, you will receive the corresponding referral reward.
+</p>
+
+        <p style="color:#cc6666;">If you want to earn a monthly salary of 5,000 to 1,000,000 ZMW or start a business with Boralex for more rewards and commissions, now is the time to ask yourself: Do you really want to change your life? Do you have the confidence and determination? Don’t envy the rich. No one is born rich. We must be persistent and positive!</p>
+
+        <p style="color:#cc6666;">Start now, work for yourself! A journey of a thousand miles begins with a single step. You may move slowly, but every small effort brings you closer to your goal!</p>
+
+        <h2>Boralex:</h2>
+
+        <img src="https://i.imgur.com/xEyifwV.jpeg" alt="Cosmic Image">
+
+        <p>Boralex was founded in 1990. It's a listed company that has been around for 35 years. It's the largest clean - energy company in countries like the UK, France, Canada, and the US, and is a world leader in wind and solar energy production. We design and sell high - performance, reliable solar cells, modules, and photovoltaic (PV) systems to residential, commercial, government, and utility customers.</p>
+
+        <p>Solar energy is becoming an integral part of people’s lives. Today, it is widely used in electricity generation, heating, lighting, and more. Electrical appliances and vehicles are being solar-powered, providing both convenience and environmental protection.</p>
+
+        <iframe src="https://www.youtube.com/embed/-xWlNeK3NIY" allowfullscreen></iframe>
+
+        <p>We are a multinational leader in solar equipment production. Our members help promote our products, solve electricity problems for Africans, and generate income—while providing part-time job opportunities to many people in need.</p>
+
+    </div>
+    <script src="js/base.js"></script>
 </body>
 </html>

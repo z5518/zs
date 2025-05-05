@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Resources</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/xd.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">Boralex</div>
+            <div class="menu-icon" onclick="toggleMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Work Guide</a></li>
+                <li><a href="xa.html">Promotion Techniques</a></li>
+                <li><a href="xb.html">Product Details</a></li>
+                <li><a href="xc.html">FAQ & Solutions</a></li>
+                <li><a href="xd.html">Videos/Images</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Videos/Images</h1>
+
+        <div class="category-filter">
+            <button class="filter-btn active" onclick="filterResources('all')">All</button>
+            <button class="filter-btn" onclick="filterResources('video')">Video</button>
+            <button class="filter-btn" onclick="filterResources('image')">Image</button>
+        </div>
+
+        <div class="resource-grid">
+            <!-- x -->
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="caption"></div>
+        <div id="saveHint" class="save-hint">(Long press the image to save it)</div> <!-- x -->
+    </div>
+
+    <script src="js/base.js"></script>
+    <script src="js/xd.js"></script>
+</body>
+</html>
