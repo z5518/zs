@@ -96,16 +96,18 @@
 
     .share-icons {
       display: flex;
+      flex-wrap: nowrap;              /* 保持一行 */
       justify-content: center;
       gap: 15px;
-      flex-wrap: wrap;
+      overflow-x: auto;               /* 如果太窄则横向滚动 */
+      padding: 0 5px;
     }
 
     .share-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 64px;
+      min-width: 64px;
     }
 
     .share-item a {
@@ -188,7 +190,7 @@
         </div>
         <div class="share-item">
           <a id="smsShare" target="_blank" title="SMS">
-            <svg viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
               <path d="M20 2H4C2.897 2 2 2.897 2 4V18C2 19.103 2.897 20 4 20H6V23L10 20H20C21.103 20 22 19.103 22 18V4C22 2.897 21.103 2 20 2ZM20 18H9.586L8 19.414V18H4V4H20V18Z"/>
             </svg>
           </a>
