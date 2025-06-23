@@ -20,12 +20,12 @@
       border-radius: 8px;
     }
 
-h1 {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-align: center; 
-}
+    h1 {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+    }
 
     label {
       display: block;
@@ -149,7 +149,7 @@ h1 {
 <body>
 
   <div id="formSection">
-    <h1>✨Create your personalized invitation link page✨</h1>
+    <h1>✨Create your personalized invitation link page</h1>
 
     <label>
       Your WhatsApp number
@@ -240,13 +240,14 @@ h1 {
         const phone = formatPhoneNumber(phoneRaw);
         const code = extractCode(codeRaw);
         const finalLink = `https://alanna.ink?contact=${phone}&code=${code}`;
+        const fullMessage = `${finalLink}\n\nYou can click this link to register a Boralex account or learn more about Boralex. It's a legitimate company that is government-approved and pays taxes legally. I work with Boralex myself and earn a stable income every day.`;
 
         document.getElementById('output').value = finalLink;
 
-        document.getElementById('waShare').href = `https://wa.me/?text=${encodeURIComponent(finalLink)}`;
-        document.getElementById('tgShare').href = `https://t.me/share/url?url=${encodeURIComponent(finalLink)}`;
+        document.getElementById('waShare').href = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
+        document.getElementById('tgShare').href = `https://t.me/share/url?url=${encodeURIComponent(finalLink)}&text=${encodeURIComponent("You can click this link to register a Boralex account or learn more about Boralex. It's a legitimate company that is government-approved and pays taxes legally. I work with Boralex myself and earn a stable income every day.")}`;
         document.getElementById('fbShare').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(finalLink)}`;
-        document.getElementById('smsShare').href = `sms:?&body=${encodeURIComponent(finalLink)}`;
+        document.getElementById('smsShare').href = `sms:?body=${encodeURIComponent(fullMessage)}`;
 
         document.getElementById('formSection').classList.add('hidden');
         document.getElementById('resultSection').classList.remove('hidden');
@@ -256,10 +257,11 @@ h1 {
     }
 
     function copyLink() {
-      const text = document.getElementById('output').value;
-      navigator.clipboard.writeText(text)
-        .then(() => alert('Link copied to clipboard'))
-        .catch(() => alert('Failed to copy. Please copy manually.'));
+      const link = document.getElementById('output').value;
+      const message = `${link}\n\nYou can click this link to register a Boralex account or learn more about Boralex. It's a legitimate company that is government-approved and pays taxes legally. I work with Boralex myself and earn a stable income every day.`;
+      navigator.clipboard.writeText(message)
+        .then(() => alert('Copied successfully!'))
+        .catch(() => alert('Copy failed. Please copy manually.'));
     }
 
     function resetForm() {
