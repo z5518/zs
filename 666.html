@@ -162,6 +162,9 @@
         <a id="fbShare" target="_blank" title="Facebook">
           <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/facebook.svg" alt="Facebook" />
         </a>
+        <a id="smsShare" target="_blank" title="SMS">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/sms.svg" alt="SMS" />
+        </a>
       </div>
     </div>
   </div>
@@ -201,11 +204,13 @@
 
         document.getElementById('output').value = finalLink;
 
-        // 设置各平台分享链接
+        // 设置分享链接
         document.getElementById('waShare').href = `https://wa.me/?text=${encodeURIComponent(finalLink)}`;
         document.getElementById('tgShare').href = `https://t.me/share/url?url=${encodeURIComponent(finalLink)}`;
         document.getElementById('fbShare').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(finalLink)}`;
+        document.getElementById('smsShare').href = `sms:?&body=${encodeURIComponent(finalLink)}`;
 
+        // 显示结果区域
         document.getElementById('formSection').classList.add('hidden');
         document.getElementById('resultSection').classList.remove('hidden');
       } catch (error) {
