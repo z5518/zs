@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Invitation Link Generator</title>
   <style>
     body {
@@ -133,21 +133,20 @@
       Your WhatsApp number
       <span class="gray-note">(not your Boralex account number)</span>
     </label>
-    <input type="text" id="phone" placeholder="Your WhatsApp number ...">
+    <input type="text" id="phone" placeholder="Your WhatsApp number ..." />
 
     <label>Paste your invitation link here:</label>
-    <input type="text" id="codeInput" placeholder="Paste your invitation link here ...">
+    <input type="text" id="codeInput" placeholder="Paste your invitation link here ..." />
 
     <button onclick="generateLink()">Start Creating</button>
   </div>
 
   <!-- 结果区域 -->
   <div id="resultSection" class="hidden">
-    <input type="text" id="output" readonly>
+    <input type="text" id="output" readonly />
 
     <div class="button-group">
       <button onclick="copyLink()">Copy</button>
-      <button onclick="shareLink()">System Share</button>
       <button onclick="resetForm()">Create Again</button>
     </div>
 
@@ -155,13 +154,13 @@
       <p>Share link to:</p>
       <div class="share-icons">
         <a id="waShare" target="_blank" title="WhatsApp">
-          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/whatsapp.svg" alt="WhatsApp">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/whatsapp.svg" alt="WhatsApp" />
         </a>
         <a id="tgShare" target="_blank" title="Telegram">
-          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/telegram.svg" alt="Telegram">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/telegram.svg" alt="Telegram" />
         </a>
         <a id="fbShare" target="_blank" title="Facebook">
-          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/facebook.svg" alt="Facebook">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/facebook.svg" alt="Facebook" />
         </a>
       </div>
     </div>
@@ -207,10 +206,8 @@
         document.getElementById('tgShare').href = `https://t.me/share/url?url=${encodeURIComponent(finalLink)}`;
         document.getElementById('fbShare').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(finalLink)}`;
 
-        // 切换视图
         document.getElementById('formSection').classList.add('hidden');
         document.getElementById('resultSection').classList.remove('hidden');
-
       } catch (error) {
         alert(error.message);
       }
@@ -218,24 +215,9 @@
 
     function copyLink() {
       const text = document.getElementById('output').value;
-      navigator.clipboard.writeText(text).then(() => {
-        alert('Link copied to clipboard');
-      }).catch(() => {
-        alert('Failed to copy. Please copy manually.');
-      });
-    }
-
-    function shareLink() {
-      const link = document.getElementById('output').value;
-      if (navigator.share) {
-        navigator.share({
-          title: 'Join me!',
-          text: 'Here is your invitation link:',
-          url: link
-        }).catch(() => {});
-      } else {
-        window.open(`https://wa.me/?text=${encodeURIComponent(link)}`, '_blank');
-      }
+      navigator.clipboard.writeText(text)
+        .then(() => alert('Link copied to clipboard'))
+        .catch(() => alert('Failed to copy. Please copy manually.'));
     }
 
     function resetForm() {
