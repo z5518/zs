@@ -13,11 +13,12 @@
       background-color: #f7f7f7;
     }
 
-    #formSection, #resultSection {
+    #formSection, #resultSection, #infoSection {
       background: #fff;
       padding: 20px;
       border: 1px solid #ccc;
       border-radius: 8px;
+      margin-top: 20px;
     }
 
     h1 {
@@ -136,6 +137,12 @@
       margin-top: 4px;
       text-align: center;
     }
+
+    #infoSection p {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #333;
+    }
   </style>
 </head>
 <body>
@@ -196,6 +203,13 @@
     </div>
   </div>
 
+  <div id="infoSection">
+    <h1>📌 About Your Invitation Link</h1>
+    <p>
+      Create your own personalized invitation link. Others can learn more about Boralex and how to join. They can also register and contact you directly through this link.
+    </p>
+  </div>
+
   <script>
     function extractCode(input) {
       const match = input.match(/code=([a-zA-Z0-9]+)/);
@@ -231,10 +245,12 @@
 
         document.getElementById('output').value = finalLink;
 
-        document.getElementById('waShare').href = `https://wa.me/?text=${encodeURIComponent(finalLink)}`;
-        document.getElementById('tgShare').href = `https://t.me/share/url?url=${encodeURIComponent(finalLink)}`;
-        document.getElementById('fbShare').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(finalLink)}`;
-        document.getElementById('smsShare').href = `sms:?&body=${encodeURIComponent(finalLink)}`;
+        const shareText = `👉🏼：${finalLink}\n\nClick the link to learn more about Boralex. I personally work with Boralex and earn a stable income every day.`;
+
+        document.getElementById('waShare').href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+        document.getElementById('tgShare').href = `https://t.me/share/url?url=${encodeURIComponent(finalLink)}&text=${encodeURIComponent(shareText)}`;
+        document.getElementById('fbShare').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(finalLink)}&quote=${encodeURIComponent(shareText)}`;
+        document.getElementById('smsShare').href = `sms:?body=${encodeURIComponent(shareText)}`; // 修复等号 bug
 
         document.getElementById('formSection').classList.add('hidden');
         document.getElementById('resultSection').classList.remove('hidden');
