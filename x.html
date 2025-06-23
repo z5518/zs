@@ -124,8 +124,7 @@
       background-color: #ddd;
     }
 
-    .share-item img,
-    .share-item svg {
+    .share-item img {
       width: 24px;
       height: 24px;
     }
@@ -153,9 +152,9 @@
 
     <label>
       Your WhatsApp number
-      <span class="gray-note">(not your Boralex account number)</span>
+      <span class="gray-note">.</span>
     </label>
-    <input type="text" id="phone" placeholder="Your WhatsApp number ..." />
+    <input type="text" id="phone" placeholder="Fill in your WahtsApp number ..." />
 
     <label>Paste your invitation link here:</label>
     <input type="text" id="codeInput" placeholder="Paste your invitation link here ..." />
@@ -192,14 +191,6 @@
           </a>
           <div class="share-label">Facebook</div>
         </div>
-        <div class="share-item">
-          <a id="smsShare" target="_blank" title="SMS">
-            <svg viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-              <path d="M20 2H4C2.897 2 2 2.897 2 4V18C2 19.103 2.897 20 4 20H6V23L10 20H20C21.103 20 22 19.103 22 18V4C22 2.897 21.103 2 20 2ZM20 18H9.586L8 19.414V18H4V4H20V18Z"/>
-            </svg>
-          </a>
-          <div class="share-label">SMS</div>
-        </div>
       </div>
     </div>
   </div>
@@ -223,7 +214,7 @@
       } else if (digits.length === 12 && digits.startsWith('260')) {
         return digits;
       } else {
-        throw new Error('Please enter a valid WhatsApp number (9, 10, or 12 digits starting with 260)');
+        throw new Error('Please enter your correct WhatsApp number');
       }
     }
 
@@ -233,7 +224,7 @@
 
       try {
         if (!phoneRaw || !codeRaw) {
-          alert('Phone number and invitation code are required');
+          alert('Please paste your own Boralex invite link and your WhatsApp number');
           return;
         }
 
@@ -247,7 +238,6 @@
         document.getElementById('waShare').href = `https://wa.me/?text=${encodeURIComponent(fullMessage)}`;
         document.getElementById('tgShare').href = `https://t.me/share/url?url=${encodeURIComponent(finalLink)}&text=${encodeURIComponent("You can click this link to register a Boralex account or learn more about Boralex. It's a legitimate company that is government-approved and pays taxes legally. I work with Boralex myself and earn a stable income every day.")}`;
         document.getElementById('fbShare').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(finalLink)}`;
-        document.getElementById('smsShare').href = `sms:?body=${encodeURIComponent(fullMessage)}`;
 
         document.getElementById('formSection').classList.add('hidden');
         document.getElementById('resultSection').classList.remove('hidden');
