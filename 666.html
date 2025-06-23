@@ -117,7 +117,7 @@
       background-color: #ddd;
     }
 
-    .share-icons img {
+    .share-icons img, .share-icons svg {
       width: 24px;
       height: 24px;
     }
@@ -152,22 +152,35 @@
 
     <div class="share-section">
       <p>Share link to:</p>
-      <div class="share-icons">
-        <a id="waShare" target="_blank" title="WhatsApp">
-          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/whatsapp.svg" alt="WhatsApp" />
-        </a>
-        <a id="tgShare" target="_blank" title="Telegram">
-          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/telegram.svg" alt="Telegram" />
-        </a>
-        <a id="fbShare" target="_blank" title="Facebook">
-          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/facebook.svg" alt="Facebook" />
-        </a>
-        <a id="smsShare" target="_blank" title="SMS">
+<div class="share-icons">
+  <a id="waShare" target="_blank" title="WhatsApp">
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/whatsapp.svg" alt="WhatsApp" />
+      <span style="font-size: 12px; margin-top: 4px;">WhatsApp</span>
+    </div>
+  </a>
+  <a id="tgShare" target="_blank" title="Telegram">
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/telegram.svg" alt="Telegram" />
+      <span style="font-size: 12px; margin-top: 4px;">Telegram</span>
+    </div>
+  </a>
+  <a id="fbShare" target="_blank" title="Facebook">
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/facebook.svg" alt="Facebook" />
+      <span style="font-size: 12px; margin-top: 4px;">Facebook</span>
+    </div>
+  </a>
+  <a id="smsShare" target="_blank" title="SMS">
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <svg viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+        <path d="M20 2H4C2.897 2 2 2.897 2 4V18C2 19.103 2.897 20 4 20H6V23L10 20H20C21.103 20 22 19.103 22 18V4C22 2.897 21.103 2 20 2ZM20 18H9.586L8 19.414V18H4V4H20V18Z"/>
+      </svg>
+      <span style="font-size: 12px; margin-top: 4px;">SMS</span>
+    </div>
+  </a>
+</div>
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/SMS_Icon.png" alt="SMS" />
-
-        </a>
-      </div>
     </div>
   </div>
 
@@ -206,13 +219,11 @@
 
         document.getElementById('output').value = finalLink;
 
-        // 设置分享链接
         document.getElementById('waShare').href = `https://wa.me/?text=${encodeURIComponent(finalLink)}`;
         document.getElementById('tgShare').href = `https://t.me/share/url?url=${encodeURIComponent(finalLink)}`;
         document.getElementById('fbShare').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(finalLink)}`;
         document.getElementById('smsShare').href = `sms:?&body=${encodeURIComponent(finalLink)}`;
 
-        // 显示结果区域
         document.getElementById('formSection').classList.add('hidden');
         document.getElementById('resultSection').classList.remove('hidden');
       } catch (error) {
