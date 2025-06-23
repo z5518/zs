@@ -96,18 +96,16 @@
 
     .share-icons {
       display: flex;
-      flex-wrap: nowrap;              /* 保持一行 */
+      flex-wrap: nowrap;
       justify-content: center;
-      gap: 15px;
-      overflow-x: auto;               /* 如果太窄则横向滚动 */
-      padding: 0 5px;
+      gap: 8px;
     }
 
     .share-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 64px;
+      width: 60px;
     }
 
     .share-item a {
@@ -133,16 +131,15 @@
     }
 
     .share-label {
-      font-size: 12px;
+      font-size: 10px;
       color: #444;
-      margin-top: 6px;
+      margin-top: 4px;
       text-align: center;
     }
   </style>
 </head>
 <body>
 
-  <!-- 输入区域 -->
   <div id="formSection">
     <h1>Create your personalized invitation link page</h1>
 
@@ -158,7 +155,6 @@
     <button onclick="generateLink()">Start Creating</button>
   </div>
 
-  <!-- 结果区域 -->
   <div id="resultSection" class="hidden">
     <input type="text" id="output" readonly />
 
