@@ -60,7 +60,7 @@
 
     #output {
       margin-top: 10px;
-      word-break: break-all;
+      word-break: break-word;
       background: #fff;
       padding: 10px;
       border: 1px solid #ddd;
@@ -101,7 +101,14 @@
       flex-wrap: wrap;
     }
 
-    .share-icons a {
+    .share-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 64px;
+    }
+
+    .share-item a {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -113,13 +120,21 @@
       transition: background 0.2s;
     }
 
-    .share-icons a:hover {
+    .share-item a:hover {
       background-color: #ddd;
     }
 
-    .share-icons img, .share-icons svg {
+    .share-item img,
+    .share-item svg {
       width: 24px;
       height: 24px;
+    }
+
+    .share-label {
+      font-size: 12px;
+      color: #444;
+      margin-top: 6px;
+      text-align: center;
     }
   </style>
 </head>
@@ -152,35 +167,34 @@
 
     <div class="share-section">
       <p>Share link to:</p>
-<div class="share-icons">
-  <a id="waShare" target="_blank" title="WhatsApp">
-    <div style="display: flex; flex-direction: column; align-items: center;">
-      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/whatsapp.svg" alt="WhatsApp" />
-      <span style="font-size: 12px; margin-top: 4px;">WhatsApp</span>
-    </div>
-  </a>
-  <a id="tgShare" target="_blank" title="Telegram">
-    <div style="display: flex; flex-direction: column; align-items: center;">
-      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/telegram.svg" alt="Telegram" />
-      <span style="font-size: 12px; margin-top: 4px;">Telegram</span>
-    </div>
-  </a>
-  <a id="fbShare" target="_blank" title="Facebook">
-    <div style="display: flex; flex-direction: column; align-items: center;">
-      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/facebook.svg" alt="Facebook" />
-      <span style="font-size: 12px; margin-top: 4px;">Facebook</span>
-    </div>
-  </a>
-  <a id="smsShare" target="_blank" title="SMS">
-    <div style="display: flex; flex-direction: column; align-items: center;">
-      <svg viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-        <path d="M20 2H4C2.897 2 2 2.897 2 4V18C2 19.103 2.897 20 4 20H6V23L10 20H20C21.103 20 22 19.103 22 18V4C22 2.897 21.103 2 20 2ZM20 18H9.586L8 19.414V18H4V4H20V18Z"/>
-      </svg>
-      <span style="font-size: 12px; margin-top: 4px;">SMS</span>
-    </div>
-  </a>
-</div>
-
+      <div class="share-icons">
+        <div class="share-item">
+          <a id="waShare" target="_blank" title="WhatsApp">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/whatsapp.svg" alt="WhatsApp" />
+          </a>
+          <div class="share-label">WhatsApp</div>
+        </div>
+        <div class="share-item">
+          <a id="tgShare" target="_blank" title="Telegram">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/telegram.svg" alt="Telegram" />
+          </a>
+          <div class="share-label">Telegram</div>
+        </div>
+        <div class="share-item">
+          <a id="fbShare" target="_blank" title="Facebook">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/facebook.svg" alt="Facebook" />
+          </a>
+          <div class="share-label">Facebook</div>
+        </div>
+        <div class="share-item">
+          <a id="smsShare" target="_blank" title="SMS">
+            <svg viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 2H4C2.897 2 2 2.897 2 4V18C2 19.103 2.897 20 4 20H6V23L10 20H20C21.103 20 22 19.103 22 18V4C22 2.897 21.103 2 20 2ZM20 18H9.586L8 19.414V18H4V4H20V18Z"/>
+            </svg>
+          </a>
+          <div class="share-label">SMS</div>
+        </div>
+      </div>
     </div>
   </div>
 
