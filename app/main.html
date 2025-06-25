@@ -1,0 +1,72 @@
+​<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=800, user-scalable=no" />
+  <title>每周考核数据统计</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="main.js"></script>
+</head>
+<body>
+  <h1>每周考核数据统计</h1>
+  <button class="btn" onclick="logout()">退出登录</button>
+
+  <h2 class="section-title">
+    📊 统计
+    <select id="weekSelect" onchange="onWeekSelectChange()">
+      <option value="thisWeek" selected></option>
+      <option value="custom">选择日期范围</option>
+    </select>
+  </h2>
+  <table id="statsTable">
+    <thead><tr><th>邀请人号码</th><th>邀请人数</th><th>奖励</th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <h2 class="section-title">📋 所有详细数据</h2>
+  <div class="filter-bar">
+    <label>显示：</label>
+<select id="viewMode" onchange="onViewModeChange()">
+  <option value="all">所有数据</option>
+  <option value="week" selected>本周数据</option>
+</select>
+<button id="detailDateRangeBtn" class="btn" onclick="openDetailDateRangeDialog()">选择日期范围</button>
+
+    <label>搜索邀请人：</label>
+    <input type="text" id="filterInviter" oninput="renderFullTable()">
+    <button class="btn" onclick="openAddDialog()">添加数据</button>
+  </div>
+  <table id="fullTable">
+    <thead><tr><th>日期</th><th>邀请人号码</th><th>新会员号码</th><th>操作</th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- 添加数据弹窗 -->
+  <div id="addModal" class="modal">
+    <div class="modal-content">
+      <h3>添加新数据</h3>
+      <input type="date" id="newDate">
+      <input type="text" id="newInviter" placeholder="邀请人号码">
+      <input type="text" id="newMember" placeholder="新会员号码">
+      <div class="btn-group">
+        <button class="btn" onclick="addData()">确认添加</button>
+        <button class="btn" onclick="closeAddDialog()">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 日期选择弹窗（共享） -->
+  <div id="dateRangeModal" class="modal">
+    <div class="modal-content">
+      <h3>选择日期范围</h3>
+      <label>开始日期：</label>
+      <input type="date" id="customStartDate">
+      <label>结束日期：</label>
+      <input type="date" id="customEndDate">
+      <div class="btn-group" id="dateRangeButtons">
+        <!-- JS 动态注入按钮 -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
