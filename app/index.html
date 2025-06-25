@@ -4,24 +4,6 @@
 <head>
 
 
-<script>
-  const referrer = document.referrer;
-
-  // 允许的来源页面
-  const allowedSources = [
-    "index.html",
-    "1.html",
-    "2.html"
-  ];
-
-  // 是否是从允许的页面跳转来的
-  const isAllowed = allowedSources.some(page => referrer.includes(page));
-
-  if (!isAllowed) {
-    // 如果不是从这几个页面跳过来的，跳回首页
-    window.location.href = "../index.html";
-  }
-</script>
 
 
 
