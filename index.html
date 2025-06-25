@@ -1,92 +1,241 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>
-    // 修改后的验证检查（使用sessionStorage）
-    if (!sessionStorage.getItem('accessVerified')) {
-      if (!window.location.pathname.endsWith('access.html')) {
-        sessionStorage.setItem('redirectAfterVerify', 'index.html');
-        window.location.href = 'access.html';
-      }
+  <meta name="viewport" content="width=800, user-scalable=no" />
+  <title>登录/注册</title>
+  <style>
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
+      background-attachment: fixed;
+      background-size: cover;
     }
-  </script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
-  <link rel="stylesheet" href="styles.css">
-  <title>工作证书制作</title>
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      padding: 40px 50px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      min-width: 320px;
+      max-width: 400px;
+      transition: all 0.3s ease;
+    }
+
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 12px 14px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 14px;
+      transition: border 0.3s ease;
+    }
+
+    .login-container input:focus {
+      border-color: #80bdff;
+      outline: none;
+    }
+
+    .btn {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 12px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 12px;
+      font-size: 16px;
+      transition: background 0.3s ease, transform 0.1s ease;
+    }
+
+    .btn:hover {
+      background: #218838;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .switch-links {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .switch-links a {
+      color: #007bff;
+      text-decoration: none;
+      margin: 0 8px;
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+
+    .switch-links a:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
-<body class="bg-gray-100">
-  <nav class="bg-white shadow-md">
-    <div class="container mx-auto px-4 py-3">
-      <div class="flex justify-center items-center">
-        <div class="space-x-4">
-          <a href="index.html" class="text-gray-700 hover:text-gray-900" id="navIndex">周考核证书制作</a>
-
-<a href="app/index.html" target="_blank" class="text-gray-700 hover:text-gray-900" id="navWork">数据记录</a>
-
-
-
-
-          <a href="https://t.me/+6283863940383" target="_blank" class="text-gray-700 hover:text-gray-900">☎</a>
-          <a href="1.html" class="text-gray-700 hover:text-gray-900" id="navWork">工作证件制作</a>
-          <a href="2.html" class="text-gray-700 hover:text-gray-900" id="navWork">Vip证书制作</a>
-
-
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <section class="container mx-auto px-4 py-8">
-    <div class="image-container">
-      <img src="https://i.imgur.com/k4Qjlza.png" alt="工作证件">
-      <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
-      <div id="certificate-avatar" class="certificate-avatar" style="width: 160px; height: 160px; top: 240px; left: 195px;">
-        <label for="avatar-upload" class="block w-full h-full cursor-pointer">
-          <img id="avatar-img" src="" alt="-----上传照片--" class="w-full h-full object-cover">
-        </label>
-      </div>
-      <input type="text" id="certificate-name" class="input-field" placeholder="输入名字..." style="top: 425px; left: 210px;">
-      <input type="text" id="certificate-age" class="input-field" placeholder="输入Boralex号码..." style="top: 476px; left: 210px;">
-      <input type="tel" id="certificate-phone" class="input-field" placeholder="日期顺序（日/月/年）" style="top: 526px; left: 210px;">
-    </div>
-  </section>
-
-  <div id="cropModal" class="modal hidden">
-    <div class="modal-content">
-      <div class="mb-4">
-        <img id="cropImage" src="" alt="裁剪图">
-      </div>
-      <div class="text-right space-x-2">
-        <button id="cancelCrop" class="px-4 py-2 bg-gray-300 rounded">取消</button>
-        <button id="confirmCrop" class="px-4 py-2 bg-blue-500 text-white rounded">确认</button>
-      </div>
+<body>
+  <div class="login-container">
+    <h2 id="formTitle">登录</h2>
+    <input id="email" type="text" placeholder="账号" />
+    <input id="password" type="password" placeholder="密码" />
+    <input id="newPassword" type="password" placeholder="上方输入旧密码，此处输入你要修改的新密码" class="hidden" />
+    <button class="btn" id="authBtn">登录</button>
+    <button class="btn hidden" id="changeBtn">确认修改密码</button>
+    <div class="switch-links">
+      <a href="javascript:void(0)" id="switchToRegister">没有账号？点击注册</a>
+      <a href="javascript:void(0)" class="hidden" id="switchToLogin">已有账号？登录</a>
+      <a href="javascript:void(0)" class="hidden" id="switchToChange">修改密码</a>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script type="module">
+    // 原始 JS 脚本保持不变
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-  <script>
-    // 修改后的导航验证
-    document.getElementById('navIndex')?.addEventListener('click', function(e) {
-      if (!sessionStorage.getItem('accessVerified')) {
-        e.preventDefault();
-        sessionStorage.setItem('redirectAfterVerify', 'index.html');
-        window.location.href = 'access.html';
+    const supabase = createClient(
+      "https://tgybhckhjbmeafruvokc.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRneWJoY2toamJtZWFmcnV2b2tjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA3ODc5ODQsImV4cCI6MjA2NjM2Mzk4NH0.OWNrddp4hhZRSaCpH4NGRtoRB54hUcWDbfMEhi9Adfg"
+    );
+
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const newPasswordInput = document.getElementById("newPassword");
+    const authBtn = document.getElementById("authBtn");
+    const changeBtn = document.getElementById("changeBtn");
+
+    const switchToRegister = document.getElementById("switchToRegister");
+    const switchToLogin = document.getElementById("switchToLogin");
+    const switchToChange = document.getElementById("switchToChange");
+
+    let mode = "login";
+
+    function getFullEmail() {
+      let input = emailInput.value.trim();
+      return input.includes("@") ? input : input + "@gmail.com";
+    }
+
+    function updateFormTitle() {
+      document.getElementById("formTitle").innerText =
+        mode === "login" ? "登录" :
+        mode === "register" ? "注册" :
+        "修改密码";
+
+      authBtn.textContent = mode === "register" ? "注册" : "登录";
+    }
+
+    function show(modeToShow) {
+      mode = modeToShow;
+      updateFormTitle();
+
+      newPasswordInput.classList.toggle("hidden", mode !== "change");
+      authBtn.classList.toggle("hidden", mode === "change");
+      changeBtn.classList.toggle("hidden", mode !== "change");
+
+      switchToRegister.classList.toggle("hidden", mode !== "login");
+      switchToLogin.classList.toggle("hidden", mode === "login");
+      switchToChange.classList.toggle("hidden", mode !== "login");
+
+      emailInput.value = '';
+      passwordInput.value = '';
+      newPasswordInput.value = '';
+    }
+
+    switchToRegister.onclick = () => show("register");
+    switchToLogin.onclick = () => show("login");
+    switchToChange.onclick = () => show("change");
+
+    authBtn.onclick = async () => {
+      const email = getFullEmail();
+      const password = passwordInput.value.trim();
+      if (!email || !password) return alert("请输入账号和密码");
+
+      if (mode === "login") {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          if (error.message === "Invalid login credentials") {
+            alert("账号或密码错误，请重新输入");
+          } else if (error.message === "User not found") {
+            alert("该账号不存在，请注册");
+          } else {
+            alert("登录失败：" + error.message);
+          }
+          return;
+        }
+        window.location.href = "main.html";
+      } else {
+        const { error } = await supabase.auth.signUp({ email, password });
+        if (error) {
+          if (error.message.includes("User already registered")) {
+            alert("该账号已被注册，请直接登录");
+          } else if (error.message.includes("Password should")) {
+            alert("密码太短，至少 6 位");
+          } else if (error.message.includes("Invalid email address")) {
+            alert("邮箱格式无效");
+          } else {
+            alert("注册失败：" + error.message);
+          }
+          return;
+        }
+        alert("注册成功，请登录");
+        show("login");
       }
-    });
-    
-    document.getElementById('navWork')?.addEventListener('click', function(e) {
-      if (!sessionStorage.getItem('accessVerified')) {
-        e.preventDefault();
-        sessionStorage.setItem('redirectAfterVerify', '1.html');
-        window.location.href = 'access.html';
+    };
+
+    changeBtn.onclick = async () => {
+      const email = getFullEmail();
+      const password = passwordInput.value.trim();
+      const newPassword = newPasswordInput.value.trim();
+      if (!email || !password || !newPassword) return alert("请填写完整信息");
+
+      const { error: loginError } = await supabase.auth.signInWithPassword({ email, password });
+      if (loginError) {
+        alert("登录验证失败：" + loginError.message);
+        return;
       }
-    });
+
+      const { error: changeError } = await supabase.auth.updateUser({ password: newPassword });
+      if (changeError) {
+        if (changeError.message.includes("Password should")) {
+          alert("新密码太短，至少 6 位");
+        } else {
+          alert("修改失败：" + changeError.message);
+        }
+        return;
+      }
+
+      alert("密码修改成功，请重新登录");
+      show("login");
+    };
+
+    show("login");
+
+
+
+
   </script>
 </body>
 </html>

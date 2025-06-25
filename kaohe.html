@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <script type="module" src="js/auth-check.js"></script>
+
+
+
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,7 +15,7 @@
   <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
   <link rel="stylesheet" href="css/zs.css">
-  <title>工作证件制作</title>
+  <title>工作证书制作</title>
 </head>
 <body class="bg-gray-100">
   <nav class="bg-white shadow-md">
@@ -23,6 +27,8 @@
           <a href="https://t.me/+6283863940383" target="_blank" class="text-gray-700 hover:text-gray-900">☎</a>
           <a href="1.html" class="text-gray-700 hover:text-gray-900" id="navWork">工作证件制作</a>
           <a href="2.html" class="text-gray-700 hover:text-gray-900" id="navWork">Vip证书制作</a>
+
+
         </div>
       </div>
     </div>
@@ -30,16 +36,16 @@
 
   <section class="container mx-auto px-4 py-8">
     <div class="image-container">
-      <img src="https://i.imgur.com/8PKHn29.png" alt="工作证件背景">
+      <img src="https://i.imgur.com/k4Qjlza.png" alt="工作证件">
       <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
-      <div id="avatar" class="avatar" style="width: 160px; height: 160px; top: 300px; left: 195px;">
+      <div id="certificate-avatar" class="certificate-avatar" style="width: 160px; height: 160px; top: 240px; left: 195px;">
         <label for="avatar-upload" class="block w-full h-full cursor-pointer">
           <img id="avatar-img" src="" alt="-----上传照片--" class="w-full h-full object-cover">
         </label>
       </div>
-      <input type="text" id="name" class="input-field" placeholder="输入名字..." style="top: 491px; left: 225px;">
-      <input type="text" id="age" class="input-field" placeholder="输入Boralex号码..." style="top: 534px; left: 225px;">
-      <input type="tel" id="phone" class="input-field" placeholder="职位...." style="top: 580px; left: 225px;">
+      <input type="text" id="certificate-name" class="input-field" placeholder="输入名字..." style="top: 425px; left: 210px;">
+      <input type="text" id="certificate-age" class="input-field" placeholder="输入Boralex号码..." style="top: 476px; left: 210px;">
+      <input type="tel" id="certificate-phone" class="input-field" placeholder="日期顺序（日/月/年）" style="top: 526px; left: 210px;">
     </div>
   </section>
 
@@ -56,7 +62,6 @@
   </div>
 
   <script src="js/zs.js"></script>
-
 
 </body>
 </html>
