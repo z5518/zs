@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function() {
   let cropper;
   const cropModal = document.getElementById('cropModal');
@@ -26,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
           viewMode: 1,
           autoCropArea: 1,
           responsive: true,
-          zoomable: false, // 禁用缩放
+          zoomable: false,
           scalable: false,
           movable: false,
         });
@@ -54,4 +53,20 @@ document.addEventListener('DOMContentLoaded', function() {
   } else if (document.getElementById('certificate-avatar-upload')) {
     handleUpload('certificate-avatar-upload', 'certificate-avatar-img');
   }
+
+  // ⭐️ 添加：处理中间三位变成 ***
+  const ageInput = document.getElementById('certificate-age');
+
+  if (ageInput) {
+    ageInput.addEventListener('input', function () {
+      const raw = ageInput.value.replace(/\D/g, ''); // 只保留数字
+      if (raw.length >= 7) {
+        const masked = raw.slice(0, 3) + '***' + raw.slice(-4);
+        ageInput.value = masked;
+      } else {
+        ageInput.value = raw;
+      }
+    });
+  }
+
 });
