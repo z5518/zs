@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Promotion Approval Form</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: #f3f4f6;
+    }
+.stamp-image {
+  /* 控制位置 */
+  position: absolute;
+  bottom: 1rem;
+  left: 44rem;
+  width: 140px;
+
+  /* 控制透明度 */
+  opacity: 0.7;
+
+  /* 让它显示在所有内容下方 */
+  z-index: 0;
+}
+
+    .edit-button {
+      position: fixed;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+      z-index: 50;
+    }
+    .modal-bg {
+      background: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center py-10 px-4 relative">
+
+
+<!-- 导航栏 -->
+<nav class="bg-white border-b border-gray-300 py-4 px-6 mb-6 fixed top-0 left-0 w-full z-50 flex justify-between items-center shadow-sm">
+  <div class="flex space-x-6 text-sm font-medium">
+    <a href="kaohe.html" class="text-gray-700 hover:text-gray-900">证书制作</a>
+    <a href="main.html" class="text-gray-700 hover:text-gray-900">数据记录</a>
+    <a href="https://t.me/+6283863940383" target="_blank" class="text-gray-700 hover:text-gray-900">☎</a>
+    <a href="1.html" class="text-gray-700 hover:text-gray-900">工作证件制作</a>
+    <a href="2.html" class="text-gray-700 hover:text-gray-900">Vip证书制作</a>
+    <a href="YZ.html" class="text-gray-700 hover:text-gray-900">月薪审批表</a>
+  </div>
+</nav>
+
+<!-- 给主体内容添加顶部边距防止被导航栏遮挡 -->
+<div class="pt-24"></div>
+
+
+
+
+  <!-- Modal 弹窗 -->
+  <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-bg">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full shadow-xl">
+      <h2 class="text-xl font-semibold mb-4 text-gray-800">编辑审批信息</h2>
+
+      <div class="space-y-3">
+        <div><label class="block text-sm font-medium">员工姓名</label><input id="inputName" type="text" class="w-full border px-3 py-2 rounded" /></div>
+        <div><label class="block text-sm font-medium">团队</label><input id="inputTeam" type="text" class="w-full border px-3 py-2 rounded" /></div>
+        <div><label class="block text-sm font-medium">部门经理</label><input id="inputManager" type="text" class="w-full border px-3 py-2 rounded" /></div>
+        <div>
+          <label class="block text-sm font-medium">推广部批准</label>
+          <select id="inputApproval" class="w-full border px-3 py-2 rounded">
+            <option value="Approved">已批准 (Approved)</option>
+            <option value="Not Approved">未批准 (Not Approved)</option>
+            <option value="Pending">待处理 (Pending)</option>
+          </select>
+        </div>
+        <div><label class="block text-sm font-medium">额外月薪</label><input id="inputSalary" type="text" class="w-full border px-3 py-2 rounded" /></div>
+        <div><label class="block text-sm font-medium">批准意见</label><textarea id="inputComments" class="w-full border px-3 py-2 rounded"></textarea></div>
+        <div><label class="block text-sm font-medium">批准日期</label><input id="inputDate" type="date" class="w-full border px-3 py-2 rounded" /></div>
+      </div>
+
+      <div class="mt-6 flex justify-between">
+        <button onclick="closeModal()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">取消</button>
+        <button onclick="applyChanges()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 悬浮编辑按钮 -->
+  <button onclick="openModal()" class="edit-button bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg flex items-center">
+    ✏️ 修改
+  </button>
+
+  <!-- 主体表单 -->
+  <div class="bg-white rounded-none p-10 max-w-4xl w-full relative border border-gray-400">
+
+    <!-- LOGO 与标题 -->
+    <div class="flex justify-center items-center space-x-4 mb-10">
+      <img src="https://i.imgur.com/2RS3cMQ.png" alt="Logo" class="h-10" />
+      <h1 class="text-2xl font-bold text-gray-900 tracking-wide uppercase">Promotion Approval Form</h1>
+    </div>
+
+    <!-- 表单字段 -->
+    <div class="grid grid-cols-2 gap-6 text-gray-900 text-sm">
+      <div><label class="block font-medium mb-1">Employee Name</label><div id="name" class="border px-3 py-2 bg-gray-50">Alanna</div></div>
+      <div><label class="block font-medium mb-1">Team</label><div id="team" class="border px-3 py-2 bg-gray-50">Official Boralex Group [268]☀️</div></div>
+      <div><label class="block font-medium mb-1">Position Applied For</label><div class="border px-3 py-2 bg-gray-50">Group Admin</div></div>
+      <div><label class="block font-medium mb-1">Department Manager</label><div id="manager" class="border px-3 py-2 bg-gray-50">Alanna</div></div>
+      <div><label class="block font-medium mb-1">Promotion Dept. Approval</label><div id="approval" class="border px-3 py-2 bg-gray-50">Approved</div></div>
+      <div><label class="block font-medium mb-1">Additional Monthly Salary</label><div id="salary" class="border px-3 py-2 bg-gray-50">500</div></div>
+    </div>
+
+    <div class="mt-6">
+      <label class="block font-medium text-gray-900 mb-1">Approval Comments</label>
+      <div id="comments" class="border px-3 py-2 bg-gray-50 text-sm">
+        The employee has shown outstanding performance in the current role. Approved for promotion with salary adjustment.
+      </div>
+    </div>
+
+<div class="mt-8 border-t pt-4 text-sm text-left text-gray-900 font-bold leading-relaxed">
+  <p id="date">Approval Date: July 7, 2025</p>
+  <p>Approval Department: Human Resources</p>
+</div>
+
+
+
+
+
+
+    <!-- 印章 -->
+    <img src="https://i.imgur.com/TMjoZFd.png" alt="HR Stamp" class="stamp-image" />
+  </div>
+
+  <!-- 脚本 -->
+  <script>
+    function openModal() {
+      document.getElementById("modal").classList.remove("hidden");
+      document.getElementById("modal").classList.add("flex");
+    }
+
+    function closeModal() {
+      document.getElementById("modal").classList.remove("flex");
+      document.getElementById("modal").classList.add("hidden");
+    }
+
+    function applyChanges() {
+      document.getElementById("name").textContent = document.getElementById("inputName").value;
+      document.getElementById("team").textContent = document.getElementById("inputTeam").value;
+      document.getElementById("manager").textContent = document.getElementById("inputManager").value;
+      const approvalVal = document.getElementById("inputApproval").value;
+      document.getElementById("approval").textContent = approvalVal;
+      document.getElementById("salary").textContent = document.getElementById("inputSalary").value;
+      document.getElementById("comments").textContent = document.getElementById("inputComments").value;
+
+      const inputDate = document.getElementById("inputDate").value;
+      if (inputDate) {
+        const date = new Date(inputDate);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const formattedDate = date.toLocaleDateString('en-US', options);
+        document.getElementById("date").textContent = "Approval Date: " + formattedDate;
+      }
+      closeModal();
+    }
+  </script>
+</body>
+</html>
