@@ -149,7 +149,8 @@
       const approvalVal = document.getElementById("inputApproval").value;
       document.getElementById("approval").textContent = approvalVal;
       document.getElementById("salary").textContent = document.getElementById("inputSalary").value;
-      document.getElementById("comments").textContent = document.getElementById("inputComments").value;
+      document.getElementById("comments").innerHTML = document.getElementById("inputComments").value.replace(/\n/g, "<br>");
+
 
       const inputDate = document.getElementById("inputDate").value;
       if (inputDate) {
