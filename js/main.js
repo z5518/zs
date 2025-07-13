@@ -52,6 +52,8 @@ async function loadData() {
   renderStatsTable();
   renderFullTable();
   setDefaultWeekLabel();
+  renderEventTotalTable();
+  renderDailyRankingTable();
 }
 
 function onWeekSelectChange() {
@@ -108,6 +110,8 @@ function closeDateRangeDialog() {
 function resetToThisWeek() {
   customRange = null;
   setDefaultWeekLabel();
+  renderEventTotalTable();
+  renderDailyRankingTable();
   closeDateRangeDialog();
   renderStatsTable();
 }
@@ -327,7 +331,75 @@ async function deleteData(index) {
   if (!confirm("确认删除？")) return;
   const { error } = await supabase.from('invites').delete().eq('id', row.id);
   if (error) return alert("删除失败：" + error.message);
-  loadData();
+  
+function renderEventTotalTable() {
+  const start = new Date("2024-07-14");
+  const end = new Date("2024-07-27");
+  const map = {};
+
+  data.forEach(d => {
+    const date = new Date(d.date);
+    if (date >= start && date <= end) {
+      map[d.inviter] = (map[d.inviter] || 0) + 1;
+    }
+  });
+
+  const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
+  const tbody = document.querySelector('#eventTotalTable tbody');
+  tbody.innerHTML = '';
+
+  const rewards = [
+    'Group admin position + Android phone',
+    'Android phone',
+    'Power bank + K500',
+    'K500',
+    'K300'
+  ];
+
+  sorted.slice(0, 10).forEach(([inviter, count], index) => {
+    const reward = rewards[index] || '';
+    tbody.innerHTML += `<tr><td>${index + 1}</td><td>${inviter}</td><td>${count}</td><td>${reward}</td></tr>`;
+  });
+
+  for (let i = sorted.length; i < 10; i++) {
+    tbody.innerHTML += `<tr><td>${i + 1}</td><td></td><td></td><td></td></tr>`;
+  }
+}
+
+function renderDailyRankingTable() {
+  const today = format(new Date());
+  const map = {};
+
+  data.forEach(d => {
+    const date = format(new Date(d.date));
+    if (date === today) {
+      map[d.inviter] = (map[d.inviter] || 0) + 1;
+    }
+  });
+
+  const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
+  const tbody = document.querySelector('#dailyRankingTable tbody');
+  tbody.innerHTML = '';
+
+  const topCount = sorted.length > 0 ? sorted[0][1] : 0;
+
+  sorted.slice(0, 10).forEach(([inviter, count], index) => {
+    const reward = count === topCount && index === 0 ? 'K50' : '';
+    tbody.innerHTML += `<tr><td>${index + 1}</td><td>${inviter}</td><td>${count}</td><td>${reward}</td></tr>`;
+  });
+
+  for (let i = sorted.length; i < 10; i++) {
+    tbody.innerHTML += `<tr><td>${i + 1}</td><td></td><td></td><td></td></tr>`;
+  }
+
+  const title = document.getElementById("dailyTitle");
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const formatted = new Date().toLocaleDateString('en-US', options);
+  title.innerText = `📅 Daily Ranking: ${formatted}`;
+}
+
+
+loadData();
 }
 
 function openAddDialog() {
@@ -347,7 +419,75 @@ async function addData() {
   const { error } = await supabase.from('invites').insert([{ user_id: userId, date, inviter, member }]);
   if (error) return alert("添加失败：" + error.message);
   closeAddDialog();
-  loadData();
+  
+function renderEventTotalTable() {
+  const start = new Date("2024-07-14");
+  const end = new Date("2024-07-27");
+  const map = {};
+
+  data.forEach(d => {
+    const date = new Date(d.date);
+    if (date >= start && date <= end) {
+      map[d.inviter] = (map[d.inviter] || 0) + 1;
+    }
+  });
+
+  const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
+  const tbody = document.querySelector('#eventTotalTable tbody');
+  tbody.innerHTML = '';
+
+  const rewards = [
+    'Group admin position + Android phone',
+    'Android phone',
+    'Power bank + K500',
+    'K500',
+    'K300'
+  ];
+
+  sorted.slice(0, 10).forEach(([inviter, count], index) => {
+    const reward = rewards[index] || '';
+    tbody.innerHTML += `<tr><td>${index + 1}</td><td>${inviter}</td><td>${count}</td><td>${reward}</td></tr>`;
+  });
+
+  for (let i = sorted.length; i < 10; i++) {
+    tbody.innerHTML += `<tr><td>${i + 1}</td><td></td><td></td><td></td></tr>`;
+  }
+}
+
+function renderDailyRankingTable() {
+  const today = format(new Date());
+  const map = {};
+
+  data.forEach(d => {
+    const date = format(new Date(d.date));
+    if (date === today) {
+      map[d.inviter] = (map[d.inviter] || 0) + 1;
+    }
+  });
+
+  const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
+  const tbody = document.querySelector('#dailyRankingTable tbody');
+  tbody.innerHTML = '';
+
+  const topCount = sorted.length > 0 ? sorted[0][1] : 0;
+
+  sorted.slice(0, 10).forEach(([inviter, count], index) => {
+    const reward = count === topCount && index === 0 ? 'K50' : '';
+    tbody.innerHTML += `<tr><td>${index + 1}</td><td>${inviter}</td><td>${count}</td><td>${reward}</td></tr>`;
+  });
+
+  for (let i = sorted.length; i < 10; i++) {
+    tbody.innerHTML += `<tr><td>${i + 1}</td><td></td><td></td><td></td></tr>`;
+  }
+
+  const title = document.getElementById("dailyTitle");
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const formatted = new Date().toLocaleDateString('en-US', options);
+  title.innerText = `📅 Daily Ranking: ${formatted}`;
+}
+
+
+loadData();
 }
 
 async function logout() {
@@ -383,5 +523,73 @@ window.onViewModeChange = onViewModeChange;
 window.applyDetailDateRange = applyDetailDateRange;
 window.cancelDetailDateRange = cancelDetailDateRange;
 window.openDetailDateRangeDialog = openDetailDateRangeDialog;
+
+
+function renderEventTotalTable() {
+  const start = new Date("2024-07-14");
+  const end = new Date("2024-07-27");
+  const map = {};
+
+  data.forEach(d => {
+    const date = new Date(d.date);
+    if (date >= start && date <= end) {
+      map[d.inviter] = (map[d.inviter] || 0) + 1;
+    }
+  });
+
+  const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
+  const tbody = document.querySelector('#eventTotalTable tbody');
+  tbody.innerHTML = '';
+
+  const rewards = [
+    'Group admin position + Android phone',
+    'Android phone',
+    'Power bank + K500',
+    'K500',
+    'K300'
+  ];
+
+  sorted.slice(0, 10).forEach(([inviter, count], index) => {
+    const reward = rewards[index] || '';
+    tbody.innerHTML += `<tr><td>${index + 1}</td><td>${inviter}</td><td>${count}</td><td>${reward}</td></tr>`;
+  });
+
+  for (let i = sorted.length; i < 10; i++) {
+    tbody.innerHTML += `<tr><td>${i + 1}</td><td></td><td></td><td></td></tr>`;
+  }
+}
+
+function renderDailyRankingTable() {
+  const today = format(new Date());
+  const map = {};
+
+  data.forEach(d => {
+    const date = format(new Date(d.date));
+    if (date === today) {
+      map[d.inviter] = (map[d.inviter] || 0) + 1;
+    }
+  });
+
+  const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
+  const tbody = document.querySelector('#dailyRankingTable tbody');
+  tbody.innerHTML = '';
+
+  const topCount = sorted.length > 0 ? sorted[0][1] : 0;
+
+  sorted.slice(0, 10).forEach(([inviter, count], index) => {
+    const reward = count === topCount && index === 0 ? 'K50' : '';
+    tbody.innerHTML += `<tr><td>${index + 1}</td><td>${inviter}</td><td>${count}</td><td>${reward}</td></tr>`;
+  });
+
+  for (let i = sorted.length; i < 10; i++) {
+    tbody.innerHTML += `<tr><td>${i + 1}</td><td></td><td></td><td></td></tr>`;
+  }
+
+  const title = document.getElementById("dailyTitle");
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const formatted = new Date().toLocaleDateString('en-US', options);
+  title.innerText = `📅 Daily Ranking: ${formatted}`;
+}
+
 
 loadData();
