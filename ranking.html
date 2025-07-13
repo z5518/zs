@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=800, user-scalable=no" />
+  <title>邀请排行榜</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/ranking.js"></script>
+</head>
+<body>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="margin: 0; font-size: 24px;">邀请排行榜</h1>
+    <button class="btn" onclick="window.location.href='main.html'">返回首页</button>
+  </div>
+
+  <h2 class="section-title">📈Current Overall Ranking (July 14 to July 27)
+</h2>
+    <h>The top 5 will receive the corresponding prizes or cash rewards.
+  </h>
+  <table id="eventTotalTable">
+    <thead><tr><th>Ranking</th><th>Boralex ID</th><th>Points</th><th>Ranking Prizes</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div id="eventTotalPagination" style="margin-top: 10px; text-align: center;"></div>
+
+  <h2 class="section-title" id="dailyTitle">📅 Daily Ranking</h2>
+  <h>The member ranked 1st today will receive an extra K50 reward.</h>
+  <table id="dailyRankingTable">
+    <thead><tr><th>Ranking</th><th>Boralex ID</th><th>Points</th><th>Ranking Prizes</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div id="dailyPagination" style="margin-top: 10px; text-align: center;"></div>
+</body>
+</html>
