@@ -174,6 +174,7 @@ function renderStatsTable() {
   const map = {};
   data.forEach(d => {
     const date = parseLocalDate(d.date);
+    if (d.member !== '1' && date >= start && date <= end) {
       map[d.inviter] = (map[d.inviter] || 0) + 1;
     }
   });
