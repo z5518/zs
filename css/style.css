@@ -10,10 +10,8 @@ body {
 }
 
 
-.app-wrapper {
-  transform: scale(0.9);
-  transform-origin: top center;
-  width: 111.11%; /* 1 / 0.9 的补偿 */
+body {
+  width: 117.65%; /* 用于补偿 scale 后的缩小，否则页面会偏左 */
 }
 
 
