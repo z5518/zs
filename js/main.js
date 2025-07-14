@@ -174,9 +174,10 @@ function renderStatsTable() {
   const map = {};
   data.forEach(d => {
     const date = parseLocalDate(d.date);
-    if (d.member !== '增加积分' && date >= start && date <= end) {
+    if (d.member !== '增加积分' && d.member !== '小号' && date >= start && date <= end) {
       map[d.inviter] = (map[d.inviter] || 0) + 1;
     }
+
   });
 
 
@@ -308,7 +309,10 @@ function openAddDialog() {
   now.setHours(0, 0, 0, 0);
   document.getElementById('addModal').style.display = 'flex';
   document.getElementById('newDate').value = format(now);
+  document.getElementById('newInviter').value = ''; // 清空邀请人号码
+  document.getElementById('newMember').value = '';  // 清空新会员号码
 }
+
 
 function closeAddDialog() {
   document.getElementById('addModal').style.display = 'none';
@@ -318,12 +322,32 @@ async function addData() {
   const date = document.getElementById('newDate').value;
   const inviter = document.getElementById('newInviter').value.trim();
   const member = document.getElementById('newMember').value.trim();
+
   if (!date || !inviter || !member) return alert("请填写完整信息");
-  const { error } = await supabase.from('invites').insert([{ user_id: userId, date, inviter, member }]);
+
+  // ✅ 校验：邀请人号码必须是 9 位数字
+  if (!/^\d{9}$/.test(inviter)) {
+    return alert("邀请人号码必须是9位数字");
+  }
+
+  // ✅ 校验：新会员号码必须是 9 位数字 或 “小号” 或 “增加积分”
+  const validMember =
+    /^\d{9}$/.test(member) || member === "小号" || member === "增加积分";
+
+  if (!validMember) {
+    return alert("新会员号码必须是9位数字，或填写“小号”或“增加积分”");
+  }
+
+  // ✅ 校验通过，插入数据
+  const { error } = await supabase.from('invites').insert([
+    { user_id: userId, date, inviter, member }
+  ]);
+
   if (error) return alert("添加失败：" + error.message);
   closeAddDialog();
   loadData();
 }
+
 
 async function logout() {
   await supabase.auth.signOut();
@@ -358,5 +382,7 @@ window.onViewModeChange = onViewModeChange;
 window.applyDetailDateRange = applyDetailDateRange;
 window.cancelDetailDateRange = cancelDetailDateRange;
 window.openDetailDateRangeDialog = openDetailDateRangeDialog;
+
+
 
 loadData();

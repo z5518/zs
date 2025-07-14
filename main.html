@@ -1,5 +1,7 @@
-​<!DOCTYPE html>
+​
+<!DOCTYPE html>
 <html lang="zh">
+
 <head>
 
 
@@ -9,6 +11,7 @@
   <link rel="stylesheet" href="css/style.css">
   <script type="module" src="js/main.js"></script>
 </head>
+
 <body>
 
 
@@ -17,88 +20,111 @@
 
 
 
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-  <h1 style="margin: 0; font-size: 24px;">每周考核数据统计</h1>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="margin: 0; font-size: 24px;">每周考核数据统计</h1>
 
-  <div style="display: flex; align-items: center; gap: 16px;">
-    <a href="kaohe.html" style="text-decoration: none; color: #2d3e50;">周考核证书制作</a>
-    <a href="1.html" style="text-decoration: none; color: #2d3e50;">工作证件制作</a>
-    <a href="2.html" style="text-decoration: none; color: #2d3e50;">VIP证书制作</a>
-    <a href="YZ.html" style="text-decoration: none; color: #2d3e50;">月薪审批表</a>
-    <a href="ranking.html" style="text-decoration: none; color: #2d3e50;">活动数据</a>
-    <button class="btn" onclick="logout()">退出登录</button>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <a href="kaohe.html" style="text-decoration: none; color: #2d3e50;">周考核证书制作</a>
+      <a href="1.html" style="text-decoration: none; color: #2d3e50;">工作证件制作</a>
+      <a href="2.html" style="text-decoration: none; color: #2d3e50;">VIP证书制作</a>
+      <a href="YZ.html" style="text-decoration: none; color: #2d3e50;">月薪审批表</a>
+      <a href="ranking.html" style="text-decoration: none; color: #2d3e50;">活动数据</a>
+      <button class="btn" onclick="logout()">退出登录</button>
+    </div>
   </div>
-</div>
 
 
-<h2 class="section-title">
-  <div style="display: flex; align-items: center; gap: 10px;">
-    <span>📊统计</span>
-    <span style="font-size: 14px; color: #666;">
-      每周：邀请5人获得K200额外奖励/邀请10人K400额外奖励
-    </span>
-  </div>
-  <select id="weekSelect" onchange="onWeekSelectChange()">
-    <option value="thisWeek" selected></option>
-    <option value="custom">选择日期范围</option>
-  </select>
-</h2>
+  <h2 class="section-title">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span>📊统计</span>
+      <span style="font-size: 14px; color: #666;">
+        每周：邀请5人获得K200额外奖励/邀请10人K400额外奖励
+      </span>
+    </div>
+    <select id="weekSelect" onchange="onWeekSelectChange()">
+      <option value="thisWeek" selected></option>
+      <option value="custom">选择日期范围</option>
+    </select>
+  </h2>
 
 
 
   <table id="statsTable">
-    <thead><tr><th>Boralex ID</th><th>邀请人数</th><th>奖励</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Boralex ID</th>
+        <th>邀请人数</th>
+        <th>奖励</th>
+      </tr>
+    </thead>
     <tbody></tbody>
   </table>
 
   <h2 class="section-title">📋 所有详细数据</h2>
   <div class="filter-bar">
     <label>显示：</label>
-<select id="viewMode" onchange="onViewModeChange()">
-  <option value="all">所有数据</option>
-  <option value="week" selected>本周数据</option>
-</select>
-<button id="detailDateRangeBtn" class="btn" onclick="openDetailDateRangeDialog()">选择日期范围</button>
+    <select id="viewMode" onchange="onViewModeChange()">
+      <option value="all">所有数据</option>
+      <option value="week" selected>本周数据</option>
+    </select>
+    <button id="detailDateRangeBtn" class="btn" onclick="openDetailDateRangeDialog()">选择日期范围</button>
 
     <label>搜索邀请人：</label>
     <input type="text" id="filterInviter" oninput="renderFullTable()">
     <button class="btn" onclick="openAddDialog()">添加数据</button>
   </div>
   <table id="fullTable">
-    <thead><tr><th>日期</th><th>邀请人号码</th><th>新会员号码</th><th>操作</th></tr></thead>
+    <thead>
+      <tr>
+        <th>日期</th>
+        <th>邀请人号码</th>
+        <th>新会员号码</th>
+        <th>操作</th>
+      </tr>
+    </thead>
     <tbody></tbody>
   </table>
 
   <!-- 添加数据弹窗 -->
-<!-- 添加数据弹窗 -->
-<div id="addModal" class="modal">
-  <div class="modal-content">
-    <h3>添加新数据</h3>
+  <!-- 添加数据弹窗 -->
+  <div id="addModal" class="modal">
+    <div class="modal-content">
+      <h3>添加新数据</h3>
 
-    <div class="form-group">
-<label for="newDate">
-  选择日期：
-  <span style="color: red;">(如果不是今天的数据请务必选择日期)</span>
-</label>
-      <input type="date" id="newDate">
-    </div>
+      <div class="form-group">
+        <label for="newDate">
+          选择日期：
+          <span style="color: red;">(如果不是今天的数据请务必选择日期)</span>
+        </label>
+        <input type="date" id="newDate">
+      </div>
 
-    <div class="form-group">
-      <label for="newInviter">邀请人号码：</label>
-      <input type="text" id="newInviter" placeholder="请输入邀请人号码">
-    </div>
+      <div class="form-group">
+        <label for="newInviter">邀请人号码：</label>
+        <input type="text" id="newInviter" placeholder="请输入邀请人号码" autocomplete="off">
 
-    <div class="form-group">
-      <label for="newMember">新会员号码：</label>
-      <input type="text" id="newMember" placeholder="请输入新会员号码">
-    </div>
 
-    <div class="btn-group">
-      <button class="btn" onclick="addData()">确认添加</button>
-      <button class="btn" onclick="closeAddDialog()">取消</button>
+      </div>
+
+      <div class="form-group">
+        <label for="newMember">新会员号码：</label>
+        <input type="text" id="newMember" list="memberOptions" placeholder="请输入新会员号码" autocomplete="off" />
+
+
+        <datalist id="memberOptions">
+          <option value="小号">
+          <option value="增加积分">
+        </datalist>
+      </div>
+
+
+
+      <div class="btn-group">
+        <button class="btn" onclick="addData()">确认添加</button>
+        <button class="btn" onclick="closeAddDialog()">取消</button>
+      </div>
     </div>
   </div>
-</div>
 
 
   <!-- 日期选择弹窗（共享） -->
@@ -115,4 +141,5 @@
     </div>
   </div>
 </body>
+
 </html>
