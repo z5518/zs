@@ -44,7 +44,7 @@ function renderEventTotalTable() {
     });
 
     const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
-    const rewards = ['Group admin position + Android phone', 'Android phone', 'Power bank + K500', 'K500', 'K300'];
+    const rewards = ['Group Admin + Android Phone', 'Android phone', 'Power bank + K500', 'K500', 'K300'];
 
     // ✅ 修正后的排名逻辑（连续编号）
     let rankedList = [];
