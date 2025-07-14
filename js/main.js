@@ -174,10 +174,11 @@ function renderStatsTable() {
   const map = {};
   data.forEach(d => {
     const date = parseLocalDate(d.date);
-    if (date >= start && date <= end) {
+    if (d.member !== '增加积分' && date >= start && date <= end) {
       map[d.inviter] = (map[d.inviter] || 0) + 1;
     }
   });
+
 
   const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
   currentStats = sorted;

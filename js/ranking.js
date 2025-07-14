@@ -92,12 +92,13 @@ function renderDailyRankingTable() {
     const today = format(new Date());
     const map = {};
 
-    data.forEach(d => {
-        const date = format(new Date(d.date));
-        if (date === today) {
-            map[d.inviter] = (map[d.inviter] || 0) + 1;
-        }
-    });
+  data.forEach(d => {
+    const date = format(new Date(d.date));
+    if (date === today && d.member !== '增加积分') {
+      map[d.inviter] = (map[d.inviter] || 0) + 1;
+    }
+  });
+
 
     const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
 
