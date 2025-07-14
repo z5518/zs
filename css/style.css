@@ -201,7 +201,7 @@ th {
 #eventTotalTable td,
 #dailyRankingTable th,
 #dailyRankingTable td {
-  height: 38px;
-  padding: 1px; /* 可视情况缩小 */
+  height: 40px;
+  padding: 3px; /* 可视情况缩小 */
   vertical-align: middle;
 }
