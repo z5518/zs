@@ -8,6 +8,15 @@ body {
   color: #333;
 }
 
+html {
+  transform: scale(0.90); /* 缩放比例，例如 0.85 表示缩小到 85% */
+  transform-origin: top center;
+}
+
+body {
+  width: 117.65%; /* 用于补偿 scale 后的缩小，否则页面会偏左 */
+}
+
 h1 {
   text-align: center;
   font-size: 26px;
