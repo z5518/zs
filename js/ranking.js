@@ -82,11 +82,8 @@ function renderEventTotalTable() {
         const isFirst = pageData.findIndex(r => r.count === row.count && r.rank === row.rank) === i;
 
         const rowspan = sameGroup.length;
-        let reward = rewards[row.rank - 1] || '';
-        if (row.rank >= 6 && row.rank <= 10) {
-            reward = "Invitation to the Offline Seminar";
-        }
-const rankLabel = {
+        const reward = rewards[row.rank - 1] || '';
+        const rankLabel = {
             1: "🥇 1st Place",
             2: "🥈 2nd Place",
             3: "🥉 3rd Place",
@@ -99,15 +96,12 @@ const rankLabel = {
         const countCell = isFirst ? `<td rowspan="${rowspan}">${row.inviter !== '-' ? row.count : ''}</td>` : '';
         const rewardCell = isFirst ? `<td rowspan="${rowspan}">${reward}</td>` : '';
 
-        const rowStyle = row.rank === 1 ? ' style="color: red; font-weight: bold;"' : '';
-
-        tbody.innerHTML += `<tr${rowStyle}>
+        tbody.innerHTML += `<tr>
             ${rankCell}
             <td>${row.inviter !== '-' ? row.inviter : ''}</td>
             ${countCell}
             ${rewardCell}
         </tr>`;
-
     }
 
     renderPagination("eventTotalPagination", totalPage, totalCurrent, goToTotalPage);
