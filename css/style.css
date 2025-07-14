@@ -194,3 +194,13 @@ th {
   color: #444;
   margin-bottom: 4px;
 }
+
+/* 活动页面表格高低*/
+
+#eventTotalTable th,
+#eventTotalTable td,
+#dailyRankingTable th,
+#dailyRankingTable td {
+  height: 48px;
+  vertical-align: middle;
+}
