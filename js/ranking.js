@@ -13,6 +13,8 @@ let data = [];
 let totalPage = 1, totalCurrent = 1;
 let dailyPage = 1, dailyTotalPage = 1;
 const pageSize = 10;
+let showAllTotal = false;
+let showAllDaily = false;
 
 function format(d) {
     const date = new Date(d);
@@ -21,9 +23,9 @@ function format(d) {
 
 async function loadData() {
     const { data: rows, error } = await supabase
-      .from('invites')
-      .select('*')
-      .eq('user_id', userId);
+        .from('invites')
+        .select('*')
+        .eq('user_id', userId);
 
     if (error) return alert("加载数据失败：" + error.message);
     data = rows;
@@ -46,7 +48,6 @@ function renderEventTotalTable() {
     const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
     const rewards = ['Group Admin + Android Phone', 'Android phone', 'Power bank + K500', 'K500', 'K300'];
 
-    // ✅ 修正后的排名逻辑（连续编号）
     let rankedList = [];
     let rank = 1;
     let prevCount = null;
@@ -60,8 +61,17 @@ function renderEventTotalTable() {
         prevCount = count;
     }
 
-    totalPage = Math.ceil(rankedList.length / pageSize);
-    const pageData = rankedList.slice((totalCurrent - 1) * pageSize, totalCurrent * pageSize);
+    const existingRanks = [...new Set(rankedList.map(r => r.rank))];
+    for (let r = 1; r <= 5; r++) {
+        if (!existingRanks.includes(r)) {
+            rankedList.push({ rank: r, inviter: "-", count: 0 });
+        }
+    }
+
+    rankedList.sort((a, b) => a.rank - b.rank);
+
+    totalPage = showAllTotal ? 1 : Math.ceil(rankedList.length / pageSize);
+    const pageData = showAllTotal ? rankedList : rankedList.slice((totalCurrent - 1) * pageSize, totalCurrent * pageSize);
 
     const tbody = document.querySelector('#eventTotalTable tbody');
     tbody.innerHTML = '';
@@ -70,19 +80,28 @@ function renderEventTotalTable() {
         const row = pageData[i];
         const sameGroup = pageData.filter(r => r.count === row.count && r.rank === row.rank);
         const isFirst = pageData.findIndex(r => r.count === row.count && r.rank === row.rank) === i;
+
+        const rowspan = sameGroup.length;
         const reward = rewards[row.rank - 1] || '';
-        const rewardCell = isFirst ? `<td rowspan="${sameGroup.length}">${reward}</td>` : '';
+        const rankLabel = {
+            1: "🥇 1st Place",
+            2: "🥈 2nd Place",
+            3: "🥉 3rd Place",
+            4: "🏅 4th Place",
+            5: "🏅 5th Place"
+        };
+        const rankDisplay = rankLabel[row.rank] || row.rank;
+        const rankCell = isFirst ? `<td rowspan="${rowspan}">${rankDisplay}</td>` : '';
+
+        const countCell = isFirst ? `<td rowspan="${rowspan}">${row.inviter !== '-' ? row.count : ''}</td>` : '';
+        const rewardCell = isFirst ? `<td rowspan="${rowspan}">${reward}</td>` : '';
 
         tbody.innerHTML += `<tr>
-            <td>${row.rank}</td>
-            <td>${row.inviter}</td>
-            <td>${row.count}</td>
+            ${rankCell}
+            <td>${row.inviter !== '-' ? row.inviter : ''}</td>
+            ${countCell}
             ${rewardCell}
         </tr>`;
-    }
-
-    for (let i = pageData.length; i < pageSize; i++) {
-        tbody.innerHTML += `<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>`;
     }
 
     renderPagination("eventTotalPagination", totalPage, totalCurrent, goToTotalPage);
@@ -92,17 +111,15 @@ function renderDailyRankingTable() {
     const today = format(new Date());
     const map = {};
 
-  data.forEach(d => {
-    const date = format(new Date(d.date));
-    if (date === today && d.member !== '增加积分') {
-      map[d.inviter] = (map[d.inviter] || 0) + 1;
-    }
-  });
-
+    data.forEach(d => {
+        const date = format(new Date(d.date));
+        if (date === today && d.member !== '总榜中增加1积分') {
+            map[d.inviter] = (map[d.inviter] || 0) + 1;
+        }
+    });
 
     const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
 
-    // ✅ 修正后的排名逻辑（连续编号）
     let rankedList = [];
     let rank = 1;
     let prevCount = null;
@@ -116,8 +133,17 @@ function renderDailyRankingTable() {
         prevCount = count;
     }
 
-    dailyTotalPage = Math.ceil(rankedList.length / pageSize);
-    const pageData = rankedList.slice((dailyPage - 1) * pageSize, dailyPage * pageSize);
+    const existingRanks = [...new Set(rankedList.map(r => r.rank))];
+    for (let r = 1; r <= 5; r++) {
+        if (!existingRanks.includes(r)) {
+            rankedList.push({ rank: r, inviter: "-", count: 0 });
+        }
+    }
+
+    rankedList.sort((a, b) => a.rank - b.rank);
+
+    dailyTotalPage = showAllDaily ? 1 : Math.ceil(rankedList.length / pageSize);
+    const pageData = showAllDaily ? rankedList : rankedList.slice((dailyPage - 1) * pageSize, dailyPage * pageSize);
 
     const tbody = document.querySelector('#dailyRankingTable tbody');
     tbody.innerHTML = '';
@@ -127,19 +153,29 @@ function renderDailyRankingTable() {
         const row = pageData[i];
         const sameGroup = pageData.filter(r => r.count === row.count && r.rank === row.rank);
         const isFirst = pageData.findIndex(r => r.count === row.count && r.rank === row.rank) === i;
+
+        const rowspan = sameGroup.length;
         const reward = row.count === topCount && row.rank === 1 ? 'K50' : '';
-        const rewardCell = isFirst ? `<td rowspan="${sameGroup.length}">${reward}</td>` : '';
+
+        const rankLabel = {
+            1: "🥇 1st Place",
+            2: "🥈 2nd Place",
+            3: "🥉 3rd Place",
+            4: "🏅 4th Place",
+            5: "🏅 5th Place"
+        };
+        const rankDisplay = rankLabel[row.rank] || row.rank;
+        const rankCell = isFirst ? `<td rowspan="${rowspan}">${rankDisplay}</td>` : '';
+
+        const countCell = isFirst ? `<td rowspan="${rowspan}">${row.inviter !== '-' ? row.count : ''}</td>` : '';
+        const rewardCell = isFirst ? `<td rowspan="${rowspan}">${reward}</td>` : '';
 
         tbody.innerHTML += `<tr>
-            <td>${row.rank}</td>
-            <td>${row.inviter}</td>
-            <td>${row.count}</td>
+            ${rankCell}
+            <td>${row.inviter !== '-' ? row.inviter : ''}</td>
+            ${countCell}
             ${rewardCell}
         </tr>`;
-    }
-
-    for (let i = pageData.length; i < pageSize; i++) {
-        tbody.innerHTML += `<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>`;
     }
 
     const title = document.getElementById("dailyTitle");
@@ -153,7 +189,34 @@ function renderDailyRankingTable() {
 function renderPagination(containerId, total, current, goToFn) {
     const container = document.getElementById(containerId);
     if (!container) return;
-    if (total <= 1) return container.innerHTML = '';
+    container.innerHTML = '';
+
+    const isTotal = containerId === "eventTotalPagination";
+    const isShowAll = isTotal ? showAllTotal : showAllDaily;
+
+    // 计算实际数据条数
+    const totalEntries = isTotal
+        ? data.filter(d => {
+            const date = new Date(d.date);
+            return date >= new Date("2025-07-14") && date <= new Date("2025-07-27");
+          }).reduce((map, d) => {
+            map[d.inviter] = (map[d.inviter] || 0) + 1;
+            return map;
+          }, {})
+        : data.filter(d => {
+            const dateStr = format(new Date(d.date));
+            return dateStr === format(new Date()) && d.member !== '总榜中增加1积分';
+          }).reduce((map, d) => {
+            map[d.inviter] = (map[d.inviter] || 0) + 1;
+            return map;
+          }, {});
+
+    const totalItems = Object.keys(totalEntries).length;
+
+    // 如果数据量不足一页且不是“显示全部”模式，则不渲染分页栏
+    if (totalItems <= pageSize && !isShowAll) {
+        return;
+    }
 
     let buttons = '';
     const maxButtons = 3;
@@ -162,16 +225,23 @@ function renderPagination(containerId, total, current, goToFn) {
     let end = Math.min(total, start + maxButtons - 1);
     if (end - start < maxButtons - 1) start = Math.max(1, end - maxButtons + 1);
 
-    buttons += `<button class="btn" onclick="${goToFn.name}(1)">首页</button>`;
-    if (current > 1) buttons += `<button class="btn" onclick="${goToFn.name}(${current - 1})">上一页</button>`;
-    for (let i = start; i <= end; i++) {
-        buttons += `<button class="btn ${i === current ? 'active' : ''}" onclick="${goToFn.name}(${i})">${i}</button>`;
+    if (!isShowAll && total > 1) {
+        buttons += `<button class="btn" onclick="${goToFn.name}(1)">首页</button>`;
+        if (current > 1) buttons += `<button class="btn" onclick="${goToFn.name}(${current - 1})">上一页</button>`;
+        for (let i = start; i <= end; i++) {
+            buttons += `<button class="btn ${i === current ? 'active' : ''}" onclick="${goToFn.name}(${i})">${i}</button>`;
+        }
+        if (current < total) buttons += `<button class="btn" onclick="${goToFn.name}(${current + 1})">下一页</button>`;
+        buttons += `<button class="btn" onclick="${goToFn.name}(${total})">末页</button>`;
     }
-    if (current < total) buttons += `<button class="btn" onclick="${goToFn.name}(${current + 1})">下一页</button>`;
-    buttons += `<button class="btn" onclick="${goToFn.name}(${total})">末页</button>`;
+
+    const toggleFn = isTotal ? "toggleShowAllTotal()" : "toggleShowAllDaily()";
+    const toggleText = isShowAll ? "恢复分页" : "显示全部";
+    buttons += `<button class="btn" onclick="${toggleFn}">${toggleText}</button>`;
 
     container.innerHTML = buttons;
 }
+
 
 function goToTotalPage(p) {
     totalCurrent = p;
@@ -183,8 +253,23 @@ function goToDailyPage(p) {
     renderDailyRankingTable();
 }
 
-// 暴露全局方法
+function toggleShowAllTotal() {
+    showAllTotal = !showAllTotal;
+    totalCurrent = 1;
+    renderEventTotalTable();
+}
+
+function toggleShowAllDaily() {
+    showAllDaily = !showAllDaily;
+    dailyPage = 1;
+    renderDailyRankingTable();
+}
+
 window.goToTotalPage = goToTotalPage;
 window.goToDailyPage = goToDailyPage;
+
+window.toggleShowAllTotal = toggleShowAllTotal;
+window.toggleShowAllDaily = toggleShowAllDaily;
+
 
 loadData();

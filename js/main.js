@@ -174,7 +174,7 @@ function renderStatsTable() {
   const map = {};
   data.forEach(d => {
     const date = parseLocalDate(d.date);
-    if (d.member !== '增加积分' && d.member !== '小号' && date >= start && date <= end) {
+    if (d.member !== '总榜中增加一积分' && d.member !== '小号' && date >= start && date <= end) {
       map[d.inviter] = (map[d.inviter] || 0) + 1;
     }
 
@@ -330,12 +330,12 @@ async function addData() {
     return alert("邀请人号码必须是9位数字");
   }
 
-  // ✅ 校验：新会员号码必须是 9 位数字 或 “小号” 或 “增加积分”
+  // ✅ 校验：新会员号码必须是 9 位数字 或 “小号” 或 “总榜中增加一积分”
   const validMember =
-    /^\d{9}$/.test(member) || member === "小号" || member === "增加积分";
+    /^\d{9}$/.test(member) || member === "小号" || member === "总榜中增加一积分";
 
   if (!validMember) {
-    return alert("新会员号码必须是9位数字，或填写“小号”或“增加积分”");
+    return alert("新会员号码必须是9位数字，或填写“小号”或“总榜中增加一积分”");
   }
 
   // ✅ 校验通过，插入数据
