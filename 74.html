@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=800, user-scalable=no" />
+  <title>排名活动</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/74.js"></script>
+</head>
+<body>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="margin: 0; font-size: 24px;">邀请排行榜</h1>
+
+
+
+    <button class="btn" onclick="window.location.href='main.html'">返回首页</button>
+
+  </div>
+<p style="font-size: 12px;">
+  总榜加加积分：回到首页添加数据，填写邀请人号码或小号号码，新会员号码选择
+  <span style="color: red;">“总榜中增加一分”</span>
+  即可额外为该号码总榜增加 1 积分
+</p>
+  <p style="font-size: 12px;">
+    增加小号数据：回到首页添加数据，填写小号号码，新会员号码选择
+    <span style="color: red;">“小号”</span>
+    即可把小号加到排名中。
+  </p>
+  <h2 class="section-title">📈Current Overall Ranking (July 12 to July 21)
+</h2>
+
+    <h>The top 5 will receive the corresponding prizes or cash rewards.</h>
+  <table id="eventTotalTable">
+    <thead><tr><th>Ranking</th><th>Boralex ID</th><th>Points</th><th>Ranking Prizes</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div id="eventTotalPagination" style="margin-top: 10px; text-align: center;"></div>
+
+  <h2 class="section-title" id="dailyTitle">📅 Daily Ranking</h2>
+  <h>The member ranked 1st today will receive an extra K50 reward.</h>
+<h style="color: #c62907; font-size: 16px;">(If rankings are the same, the daily bonus will be split equally.)</h>
+
+  <table id="dailyRankingTable">
+    <thead><tr><th>Ranking</th><th>Boralex ID</th><th>Points</th><th>Ranking Prizes</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div id="dailyPagination" style="margin-top: 10px; text-align: center;"></div>
+</body>
+</html>
