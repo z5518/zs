@@ -202,6 +202,6 @@ th {
 #dailyRankingTable th,
 #dailyRankingTable td {
   height: 48px;
-  padding: 6px; /* 可视情况缩小 */
+  padding: 3px; /* 可视情况缩小 */
   vertical-align: middle;
 }
