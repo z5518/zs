@@ -174,7 +174,7 @@ function renderStatsTable() {
   const map = {};
   data.forEach(d => {
     const date = parseLocalDate(d.date);
-    if (d.member !== '1' && date >= start && date <= end) {
+    if (d.member !== '增加积分' && date >= start && date <= end) {
       map[d.inviter] = (map[d.inviter] || 0) + 1;
     }
   });
@@ -189,7 +189,7 @@ function renderStatsTable() {
   const tbody = document.querySelector('#statsTable tbody');
   tbody.innerHTML = '';
   pageData.forEach(([inviter, count]) => {
-    const reward = count >= 10 ? 'K400' : count >= 5 ? 'K200' : '暂无奖励';
+    const reward = count >= 10 ? 'K400' : count >= 5 ? 'K200' : '无奖励';
     tbody.innerHTML += `<tr><td>${inviter}</td><td>${count}</td><td>${reward}</td></tr>`;
   });
   for (let i = pageData.length; i < statsPageSize; i++) {
