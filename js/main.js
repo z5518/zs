@@ -189,7 +189,8 @@ function renderStatsTable() {
   const tbody = document.querySelector('#statsTable tbody');
   tbody.innerHTML = '';
   pageData.forEach(([inviter, count]) => {
-    const reward = count >= 10 ? 'K400' : count >= 5 ? 'K200' : '暂无奖励';
+    const reward = count >= 10 ? 'K400' : count >= 5 ? 'K200' : 'No reward
+';
     tbody.innerHTML += `<tr><td>${inviter}</td><td>${count}</td><td>${reward}</td></tr>`;
   });
   for (let i = pageData.length; i < statsPageSize; i++) {
