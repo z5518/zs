@@ -195,12 +195,13 @@ th {
   margin-bottom: 4px;
 }
 
-/* 活动页面表格高低*/
+
 
 #eventTotalTable th,
 #eventTotalTable td,
 #dailyRankingTable th,
 #dailyRankingTable td {
   height: 48px;
+  padding: 6px; /* 可视情况缩小 */
   vertical-align: middle;
 }
