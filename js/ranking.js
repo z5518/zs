@@ -113,7 +113,7 @@ function renderDailyRankingTable() {
 
     data.forEach(d => {
         const date = format(new Date(d.date));
-        if (date === today && d.member !== '总榜中增加1积分') {
+        if (date === today && d.member !== '总榜中增加一积分') {
             map[d.inviter] = (map[d.inviter] || 0) + 1;
         }
     });
