@@ -19,7 +19,15 @@ let detailDateRange = null;
 
 function format(d) {
   const date = new Date(d);
-  return date.toISOString().split('T')[0];
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function parseLocalDate(str) {
+  const [y, m, d] = str.split('-');
+  return new Date(+y, +m - 1, +d); // 避免 UTC 偏差
 }
 
 function getWeekRange(d) {
@@ -27,14 +35,16 @@ function getWeekRange(d) {
   const day = date.getDay() || 7;
   const monday = new Date(date);
   monday.setDate(date.getDate() - day + 1);
+  monday.setHours(0, 0, 0, 0);
   const sunday = new Date(monday);
   sunday.setDate(monday.getDate() + 6);
-  return [format(monday), format(sunday)];
+  sunday.setHours(23, 59, 59, 999);
+  return [monday, sunday];
 }
 
 function setDefaultWeekLabel() {
   const [start, end] = getWeekRange(new Date());
-  const weekLabel = `${start} ~ ${end}`;
+  const weekLabel = `${format(start)} ~ ${format(end)}`;
   const select = document.getElementById('weekSelect');
   select.options[0].text = weekLabel;
 }
@@ -44,8 +54,8 @@ async function loadData() {
     .from('invites')
     .select('*')
     .eq('user_id', userId)
-.order('date', { ascending: false })
-.order('inviter', { ascending: true });
+    .order('date', { ascending: false })
+    .order('inviter', { ascending: true });
 
   if (error) return alert("加载数据失败：" + error.message);
   data = rows;
@@ -62,15 +72,10 @@ function onWeekSelectChange() {
 }
 
 function onViewModeChange() {
-  const mode = document.getElementById('viewMode').value;
-
-  // 切换 viewMode 时自动清除日期范围选择
   detailDateRange = null;
   document.getElementById('detailDateRangeBtn').innerText = '选择日期范围';
-
   renderFullTable();
 }
-
 
 function openStatsDateRangeDialog() {
   document.getElementById('dateRangeModal').style.display = 'flex';
@@ -78,8 +83,6 @@ function openStatsDateRangeDialog() {
   document.getElementById('customStartDate').value = today;
   document.getElementById('customEndDate').value = today;
   document.getElementById('dateRangeButtons').innerHTML = `
-
-
     <button class="btn" onclick="resetToThisWeek()">查看本周数据</button>
     <button class="btn" onclick="closeDateRangeDialog()">取消</button>
     <button class="btn" onclick="applyCustomRange()">确认</button>
@@ -94,7 +97,6 @@ function openDetailDateRangeDialog() {
   document.getElementById('dateRangeButtons').innerHTML = `
     <button class="btn" onclick="cancelDetailDateRange()">取消</button>
     <button class="btn" onclick="applyDetailDateRange()">确认</button>
-
   `;
 }
 
@@ -113,33 +115,46 @@ function resetToThisWeek() {
 }
 
 function applyCustomRange() {
-  const start = document.getElementById('customStartDate').value;
-  const end = document.getElementById('customEndDate').value;
-  if (!start || !end || new Date(start) > new Date(end)) {
-    alert('请选择有效的日期范围');
+  const startStr = document.getElementById('customStartDate').value;
+  const endStr = document.getElementById('customEndDate').value;
+  if (!startStr || !endStr) return alert('请选择有效的日期范围');
+
+  const start = parseLocalDate(startStr);
+  start.setHours(0, 0, 0, 0);
+  const end = parseLocalDate(endStr);
+  end.setHours(23, 59, 59, 999);
+
+  if (start > end) {
+    alert('开始日期不能晚于结束日期');
     return;
   }
-  customRange = [new Date(start), new Date(end)];
+  customRange = [start, end];
   document.getElementById('dateRangeModal').style.display = 'none';
   const select = document.getElementById('weekSelect');
-  select.options[0].text = `${start} ~ ${end}`;
+  select.options[0].text = `${startStr} ~ ${endStr}`;
   select.selectedIndex = 0;
   renderStatsTable();
 }
 
 function applyDetailDateRange() {
-  const start = document.getElementById('customStartDate').value;
-  const end = document.getElementById('customEndDate').value;
-  if (!start || !end || new Date(start) > new Date(end)) {
-    alert('请选择有效的日期范围');
+  const startStr = document.getElementById('customStartDate').value;
+  const endStr = document.getElementById('customEndDate').value;
+  if (!startStr || !endStr) return alert('请选择有效的日期范围');
+
+  const start = parseLocalDate(startStr);
+  start.setHours(0, 0, 0, 0);
+  const end = parseLocalDate(endStr);
+  end.setHours(23, 59, 59, 999);
+
+  if (start > end) {
+    alert('开始日期不能晚于结束日期');
     return;
   }
-  detailDateRange = [new Date(start), new Date(end)];
+  detailDateRange = [start, end];
   document.getElementById('dateRangeModal').style.display = 'none';
-  document.getElementById('detailDateRangeBtn').innerText = `${start} ~ ${end}`;
+  document.getElementById('detailDateRangeBtn').innerText = `${startStr} ~ ${endStr}`;
   renderFullTable();
 }
-
 
 function cancelDetailDateRange() {
   document.getElementById('dateRangeModal').style.display = 'none';
@@ -148,20 +163,17 @@ function cancelDetailDateRange() {
   renderFullTable();
 }
 
-
 function renderStatsTable() {
   let start, end;
   if (customRange) {
     [start, end] = customRange;
   } else {
     [start, end] = getWeekRange(new Date());
-    start = new Date(start);
-    end = new Date(end);
   }
 
   const map = {};
   data.forEach(d => {
-    const date = new Date(d.date);
+    const date = parseLocalDate(d.date);
     if (date >= start && date <= end) {
       map[d.inviter] = (map[d.inviter] || 0) + 1;
     }
@@ -202,56 +214,34 @@ function renderStatsPagination(totalPages) {
   const half = Math.floor(maxButtons / 2);
   let start = Math.max(1, statsPage - half);
   let end = Math.min(totalPages, start + maxButtons - 1);
-  if (end - start < maxButtons - 1) {
-    start = Math.max(1, end - maxButtons + 1);
-  }
+  if (end - start < maxButtons - 1) start = Math.max(1, end - maxButtons + 1);
 
   buttons += `<button class="btn" onclick="goToStatsPage(1)">首页</button>`;
-  if (statsPage > 1) {
-    buttons += `<button class="btn" onclick="goToStatsPage(${statsPage - 1})">上一页</button>`;
-  }
-
-  if (start > 1) {
-    buttons += `<button class="btn" onclick="goToStatsPage(1)">1</button>`;
-    if (start > 2) buttons += `<span>...</span>`;
-  }
-
+  if (statsPage > 1) buttons += `<button class="btn" onclick="goToStatsPage(${statsPage - 1})">上一页</button>`;
   for (let i = start; i <= end; i++) {
-buttons += `<button class="btn ${i === statsPage ? 'active' : ''}" onclick="goToStatsPage(${i})">${i}</button>`;
+    buttons += `<button class="btn ${i === statsPage ? 'active' : ''}" onclick="goToStatsPage(${i})">${i}</button>`;
   }
-
-  if (end < totalPages) {
-    if (end < totalPages - 1) buttons += `<span>...</span>`;
-    buttons += `<button class="btn" onclick="goToStatsPage(${totalPages})">${totalPages}</button>`;
-  }
-
-  if (statsPage < totalPages) {
-    buttons += `<button class="btn" onclick="goToStatsPage(${statsPage + 1})">下一页</button>`;
-  }
+  if (statsPage < totalPages) buttons += `<button class="btn" onclick="goToStatsPage(${statsPage + 1})">下一页</button>`;
   buttons += `<button class="btn" onclick="goToStatsPage(${totalPages})">末页</button>`;
 
   container.innerHTML = buttons;
 }
 
 function renderFullTable() {
-const mode = document.getElementById('viewMode').value;
-const view = mode;
+  const mode = document.getElementById('viewMode').value;
   const filterInviter = document.getElementById('filterInviter').value.trim();
   const [weekStart, weekEnd] = getWeekRange(new Date());
 
-let filtered = data.filter(d => {
-  const date = new Date(d.date);
-  const matchMode =
-    view === 'all' ||
-    (view === 'week' && date >= new Date(weekStart) && date <= new Date(weekEnd));
-
-  const matchRange =
-    !detailDateRange || (date >= detailDateRange[0] && date <= detailDateRange[1]);
-
-  return matchMode && matchRange &&
-         (!filterInviter || d.inviter.includes(filterInviter));
-});
-
+  const filtered = data.filter(d => {
+    const date = parseLocalDate(d.date);
+    date.setHours(12, 0, 0, 0);
+    const matchMode =
+      mode === 'all' ||
+      (mode === 'week' && date >= weekStart && date <= weekEnd);
+    const matchRange =
+      !detailDateRange || (date >= detailDateRange[0] && date <= detailDateRange[1]);
+    return matchMode && matchRange && (!filterInviter || d.inviter.includes(filterInviter));
+  });
 
   const totalPages = Math.ceil(filtered.length / fullPageSize);
   currentPage = Math.min(currentPage, totalPages || 1);
@@ -291,32 +281,14 @@ function renderPagination(totalPages) {
   const half = Math.floor(maxButtons / 2);
   let start = Math.max(1, currentPage - half);
   let end = Math.min(totalPages, start + maxButtons - 1);
-  if (end - start < maxButtons - 1) {
-    start = Math.max(1, end - maxButtons + 1);
-  }
+  if (end - start < maxButtons - 1) start = Math.max(1, end - maxButtons + 1);
 
   buttons += `<button class="btn" onclick="goToPage(1)">首页</button>`;
-  if (currentPage > 1) {
-    buttons += `<button class="btn" onclick="goToPage(${currentPage - 1})">上一页</button>`;
-  }
-
-  if (start > 1) {
-    buttons += `<button class="btn" onclick="goToPage(1)">1</button>`;
-    if (start > 2) buttons += `<span>...</span>`;
-  }
-
+  if (currentPage > 1) buttons += `<button class="btn" onclick="goToPage(${currentPage - 1})">上一页</button>`;
   for (let i = start; i <= end; i++) {
-buttons += `<button class="btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+    buttons += `<button class="btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
   }
-
-  if (end < totalPages) {
-    if (end < totalPages - 1) buttons += `<span>...</span>`;
-    buttons += `<button class="btn" onclick="goToPage(${totalPages})">${totalPages}</button>`;
-  }
-
-  if (currentPage < totalPages) {
-    buttons += `<button class="btn" onclick="goToPage(${currentPage + 1})">下一页</button>`;
-  }
+  if (currentPage < totalPages) buttons += `<button class="btn" onclick="goToPage(${currentPage + 1})">下一页</button>`;
   buttons += `<button class="btn" onclick="goToPage(${totalPages})">末页</button>`;
 
   container.innerHTML = buttons;
@@ -331,8 +303,10 @@ async function deleteData(index) {
 }
 
 function openAddDialog() {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
   document.getElementById('addModal').style.display = 'flex';
-  document.getElementById('newDate').value = format(new Date());
+  document.getElementById('newDate').value = format(now);
 }
 
 function closeAddDialog() {
@@ -365,7 +339,7 @@ function goToStatsPage(p) {
   renderStatsTable();
 }
 
-// 暴露函数给 HTML
+// 暴露函数
 window.logout = logout;
 window.renderStatsTable = renderStatsTable;
 window.renderFullTable = renderFullTable;
