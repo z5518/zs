@@ -8,13 +8,12 @@ body {
   background: #eef1f5;
   color: #333;
 }
-html {
-  transform: scale(0.90); /* 缩放比例，例如 0.85 表示缩小到 85% */
-  transform-origin: top center;
-}
 
-body {
-  width: 117.65%; /* 用于补偿 scale 后的缩小，否则页面会偏左 */
+
+.app-wrapper {
+  transform: scale(0.9);
+  transform-origin: top center;
+  width: 111.11%; /* 1 / 0.9 的补偿 */
 }
 
 
