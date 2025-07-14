@@ -82,7 +82,10 @@ function renderEventTotalTable() {
         const isFirst = pageData.findIndex(r => r.count === row.count && r.rank === row.rank) === i;
 
         const rowspan = sameGroup.length;
-        const reward = rewards[row.rank - 1] || '';
+        let reward = rewards[row.rank - 1] || '';
+        if (row.rank >= 6 && row.rank <= 10) {
+            reward = "Invitation to the Offline Seminar";
+        }
         const rankLabel = {
             1: "🥇 1st Place",
             2: "🥈 2nd Place",
@@ -96,12 +99,15 @@ function renderEventTotalTable() {
         const countCell = isFirst ? `<td rowspan="${rowspan}">${row.inviter !== '-' ? row.count : ''}</td>` : '';
         const rewardCell = isFirst ? `<td rowspan="${rowspan}">${reward}</td>` : '';
 
-        tbody.innerHTML += `<tr>
+        const rowStyle = row.rank === 1 ? ' style="color: red; font-weight: bold;"' : '';
+
+        tbody.innerHTML += `<tr${rowStyle}>
             ${rankCell}
             <td>${row.inviter !== '-' ? row.inviter : ''}</td>
             ${countCell}
             ${rewardCell}
         </tr>`;
+
     }
 
     renderPagination("eventTotalPagination", totalPage, totalCurrent, goToTotalPage);
@@ -170,12 +176,15 @@ function renderDailyRankingTable() {
         const countCell = isFirst ? `<td rowspan="${rowspan}">${row.inviter !== '-' ? row.count : ''}</td>` : '';
         const rewardCell = isFirst ? `<td rowspan="${rowspan}">${reward}</td>` : '';
 
-        tbody.innerHTML += `<tr>
+        const rowStyle = row.rank === 1 ? ' style="color: red; font-weight: bold;"' : '';
+
+        tbody.innerHTML += `<tr${rowStyle}>
             ${rankCell}
             <td>${row.inviter !== '-' ? row.inviter : ''}</td>
             ${countCell}
             ${rewardCell}
         </tr>`;
+
     }
 
     const title = document.getElementById("dailyTitle");
@@ -199,17 +208,17 @@ function renderPagination(containerId, total, current, goToFn) {
         ? data.filter(d => {
             const date = new Date(d.date);
             return date >= new Date("2025-07-14") && date <= new Date("2025-07-27");
-          }).reduce((map, d) => {
+        }).reduce((map, d) => {
             map[d.inviter] = (map[d.inviter] || 0) + 1;
             return map;
-          }, {})
+        }, {})
         : data.filter(d => {
             const dateStr = format(new Date(d.date));
             return dateStr === format(new Date()) && d.member !== '总榜中增加1积分';
-          }).reduce((map, d) => {
+        }).reduce((map, d) => {
             map[d.inviter] = (map[d.inviter] || 0) + 1;
             return map;
-          }, {});
+        }, {});
 
     const totalItems = Object.keys(totalEntries).length;
 
