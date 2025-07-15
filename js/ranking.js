@@ -114,15 +114,17 @@ function renderEventTotalTable() {
 }
 
 function renderDailyRankingTable() {
-    const today = format(new Date());
+    const today = format(new Date()); // 本地今天，比如 "2025-07-15"
     const map = {};
 
     data.forEach(d => {
-        const date = format(new Date(d.date));
-        if (date === today && d.member !== '总榜中增加一积分') {
+        // 
+        const localDateStr = format(new Date(d.date + 'T00:00:00'));
+        if (localDateStr === today && d.member !== '总榜中增加一积分') {
             map[d.inviter] = (map[d.inviter] || 0) + 1;
         }
     });
+
 
     const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
 
