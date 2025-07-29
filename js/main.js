@@ -171,10 +171,12 @@ function renderStatsTable() {
     [start, end] = getWeekRange(new Date());
   }
 
+// 总榜中增加一积分/小号
+
   const map = {};
   data.forEach(d => {
     const date = parseLocalDate(d.date);
-    if (d.member !== '总榜中增加一积分' && d.member !== '小号' && date >= start && date <= end) {
+    if (d.member !== '输入新会员号码' && d.member !== '不要忘记选择日期' && date >= start && date <= end) {
       map[d.inviter] = (map[d.inviter] || 0) + 1;
     }
 
